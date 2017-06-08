@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initListener() {
-        //Glide 下载监听
+        //Glide 加载监听
         ProgressManager.getInstance().addResponseListener(IMAGE_URL, getGlideListener());
 
 

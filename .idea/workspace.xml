@@ -10,12 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8520f098-70b6-4fe1-8f52-c8cbc97af816" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.lock" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/progress/src/main/java/me/jessyan/progressmanager/ProgressManager.java" afterPath="$PROJECT_DIR$/progress/src/main/java/me/jessyan/progressmanager/ProgressManager.java" />
     </list>
     <ignored path="ProgressManager.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,18 +53,36 @@
     <favorites_list name="ProgressManager" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/README.md">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="180">
+                  <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="BaseApplication.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/BaseApplication.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="270">
+                  <caret line="21" column="25" selection-start-line="20" selection-start-column="13" selection-end-line="21" selection-end-column="25" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -3722,8 +3739,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainActivity.java" />
         <option value="$PROJECT_DIR$/gradle.properties" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/GlideConfiguration.java" />
         <option value="$PROJECT_DIR$/app/src/test/java/me/jessyan/progressmanager/demo/ExampleUnitTest.java" />
@@ -3738,6 +3753,9 @@
         <option value="$PROJECT_DIR$/progress/bintray.gradle" />
         <option value="$PROJECT_DIR$/progress/build.gradle" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/progress/src/main/java/me/jessyan/progressmanager/ProgressManager.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainFragment.java" />
         <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
@@ -3772,52 +3790,7 @@
     </navigator>
     <panes>
       <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ProgressManager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ProgressManager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ProgressManager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ProgressManager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ProgressManager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="progress" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ProgressManager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ProgressManager" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
+        <subPane />
       </pane>
       <pane id="PackagesPane" />
       <pane id="Scope" />
@@ -4204,11 +4177,11 @@
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Freeline" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="CodotaView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -4277,87 +4250,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="147" column="55" selection-start-line="147" selection-start-column="55" selection-end-line="147" selection-end-column="55" />
-          <folding>
-            <marker date="1496908046000" expanded="false" signature="49:746" ph="..." />
-            <marker date="1496908046000" expanded="true" signature="748:836" ph="/**...*/" />
-            <marker date="1496908046000" expanded="true" signature="1318:1341" ph="@{...}" />
-            <marker date="1496908046000" expanded="true" signature="1464:1577" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="1665:1765" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="1796:2341" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="2371:2750" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="2821:3955" ph="{...}" />
-            <marker date="1496908046000" expanded="false" signature="2838:2948" ph="(progressInfo) → {" />
-            <marker date="1496908046000" expanded="true" signature="2965:3138" ph="//..." />
-            <marker date="1496908046000" expanded="false" signature="3933:3948" ph="}" />
-            <marker date="1496908046000" expanded="true" signature="4021:5152" ph="{...}" />
-            <marker date="1496908046000" expanded="false" signature="4038:4148" ph="(progressInfo) → {" />
-            <marker date="1496908046000" expanded="true" signature="4165:4338" ph="//..." />
-            <marker date="1496908046000" expanded="false" signature="5130:5145" ph="}" />
-            <marker date="1496908046000" expanded="true" signature="5215:5680" ph="{...}" />
-            <marker date="1496908046000" expanded="false" signature="5232:5342" ph="(progressInfo) → {" />
-            <marker date="1496908046000" expanded="false" signature="5658:5673" ph="}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="101" column="55" selection-start-line="101" selection-start-column="55" selection-end-line="101" selection-end-column="55" />
-          <folding>
-            <marker date="1496908046000" expanded="false" signature="49:796" ph="..." />
-            <marker date="1496908046000" expanded="true" signature="1794:2159" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="2190:2985" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="3019:3389" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="3459:3926" ph="{...}" />
-            <marker date="1496908046000" expanded="false" signature="3476:3586" ph="(progressInfo) → {" />
-            <marker date="1496908046000" expanded="false" signature="3904:3919" ph="}" />
-            <marker date="1496908046000" expanded="true" signature="3990:5214" ph="{...}" />
-            <marker date="1496908046000" expanded="false" signature="4007:4117" ph="(progressInfo) → {" />
-            <marker date="1496908046000" expanded="true" signature="4134:4307" ph="//..." />
-            <marker date="1496908046000" expanded="false" signature="5192:5207" ph="}" />
-            <marker date="1496908046000" expanded="true" signature="5280:6411" ph="{...}" />
-            <marker date="1496908046000" expanded="false" signature="5297:5407" ph="(progressInfo) → {" />
-            <marker date="1496908046000" expanded="true" signature="5424:5597" ph="//..." />
-            <marker date="1496908046000" expanded="false" signature="6389:6404" ph="}" />
-            <marker date="1496908046000" expanded="true" signature="6460:6778" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="6784:6862" ph="/**...*/" />
-            <marker date="1496908046000" expanded="true" signature="6894:7731" ph="{...}" />
-            <marker date="1496908046000" expanded="false" signature="7379:7449" ph="(Runnable) () → {" />
-            <marker date="1496908046000" expanded="false" signature="7700:7715" ph="}" />
-            <marker date="1496908046000" expanded="true" signature="7737:7815" ph="/**...*/" />
-            <marker date="1496908046000" expanded="true" signature="7849:8367" ph="{...}" />
-            <marker date="1496908046000" expanded="false" signature="7986:8056" ph="(Runnable) () → {" />
-            <marker date="1496908046000" expanded="false" signature="8336:8351" ph="}" />
-            <marker date="1496908046000" expanded="true" signature="8373:8486" ph="/**...*/" />
-            <marker date="1496908046000" expanded="true" signature="8517:8757" ph="{...}" />
-            <marker date="1496908046000" expanded="true" signature="8841:9105" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/settings.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/GlideConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
-          <folding>
-            <marker date="1496909405000" expanded="false" signature="49:332" ph="..." />
-            <marker date="1496909405000" expanded="true" signature="334:422" ph="/**...*/" />
-            <marker date="1496909405000" expanded="true" signature="563:571" ph="{...}" />
-            <marker date="1496909405000" expanded="true" signature="652:951" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -4379,31 +4276,6 @@
             <marker date="1496904049000" expanded="true" signature="1941:2547" ph="{...}" />
             <marker date="1496904049000" expanded="false" signature="2297:2391" ph="() → {" />
             <marker date="1496904049000" expanded="false" signature="2476:2503" ph="}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/progress/src/main/java/me/jessyan/progressmanager/ProgressManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="28" column="19" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
-          <folding>
-            <marker date="1496848976000" expanded="false" signature="44:450" ph="..." />
-            <marker date="1496848976000" expanded="true" signature="452:875" ph="/**...*/" />
-            <marker date="1496848976000" expanded="true" signature="1387:1712" ph="{...}" />
-            <marker date="1496848976000" expanded="false" signature="1478:1591" ph="(Interceptor) (chain) → {" />
-            <marker date="1496848976000" expanded="false" signature="1690:1705" ph="}" />
-            <marker date="1496848976000" expanded="true" signature="1763:2046" ph="{...}" />
-            <marker date="1496848976000" expanded="true" signature="2052:2194" ph="/**...*/" />
-            <marker date="1496848976000" expanded="true" signature="2269:2662" ph="{...}" />
-            <marker date="1496848976000" expanded="true" signature="2668:2810" ph="/**...*/" />
-            <marker date="1496848976000" expanded="true" signature="2886:3281" ph="{...}" />
-            <marker date="1496848976000" expanded="true" signature="3287:3398" ph="/**...*/" />
-            <marker date="1496848976000" expanded="true" signature="3466:3550" ph="{...}" />
-            <marker date="1496848976000" expanded="true" signature="3556:3744" ph="/**...*/" />
-            <marker date="1496848976000" expanded="true" signature="3797:4272" ph="{...}" />
-            <marker date="1496848976000" expanded="true" signature="4278:4468" ph="/**...*/" />
-            <marker date="1496848976000" expanded="true" signature="4525:5000" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -4519,22 +4391,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/progress/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-          <folding>
-            <marker date="1496911550000" expanded="true" signature="45:716" ph="{...}" />
-            <marker date="1496911550000" expanded="true" signature="170:452" ph="{...}" />
-            <marker date="1496911550000" expanded="true" signature="468:630" ph="{...}" />
-            <marker date="1496911550000" expanded="true" signature="486:624" ph="{...}" />
-            <marker date="1496911550000" expanded="true" signature="647:714" ph="{...}" />
-            <marker date="1496911550000" expanded="true" signature="731:837" ph="{...}" />
-            <marker date="1496911550000" expanded="false" signature="800:835" ph="com.squareup.okhttp3:okhttp:3.8.0 [processing...]" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/progress/bintray.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -4585,10 +4441,158 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/progress/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+          <folding>
+            <marker date="1496911550000" expanded="true" signature="45:716" ph="{...}" />
+            <marker date="1496911550000" expanded="true" signature="170:452" ph="{...}" />
+            <marker date="1496911550000" expanded="true" signature="468:630" ph="{...}" />
+            <marker date="1496911550000" expanded="true" signature="486:624" ph="{...}" />
+            <marker date="1496911550000" expanded="true" signature="647:714" ph="{...}" />
+            <marker date="1496911550000" expanded="true" signature="731:837" ph="{...}" />
+            <marker date="1496911550000" expanded="false" signature="800:835" ph="com.squareup.okhttp3:okhttp:3.8.0 [processing...]" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/progress/src/main/java/me/jessyan/progressmanager/ProgressInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="8" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="34" />
+          <folding>
+            <marker date="1496904960000" expanded="true" signature="37:125" ph="/**...*/" />
+            <marker date="1496904960000" expanded="true" signature="310:465" ph="//..." />
+            <marker date="1496904960000" expanded="false" signature="499:510" ph=" { " />
+            <marker date="1496904960000" expanded="false" signature="523:529" ph=" }" />
+            <marker date="1496904960000" expanded="false" signature="581:592" ph=" { " />
+            <marker date="1496904960000" expanded="false" signature="625:631" ph=" }" />
+            <marker date="1496904960000" expanded="false" signature="685:696" ph=" { " />
+            <marker date="1496904960000" expanded="false" signature="731:737" ph=" }" />
+            <marker date="1496904960000" expanded="false" signature="772:783" ph=" { " />
+            <marker date="1496904960000" expanded="false" signature="803:809" ph=" }" />
+            <marker date="1496904960000" expanded="false" signature="845:856" ph=" { " />
+            <marker date="1496904960000" expanded="false" signature="877:883" ph=" }" />
+            <marker date="1496904960000" expanded="false" signature="908:919" ph=" { " />
+            <marker date="1496904960000" expanded="false" signature="929:935" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/progress/src/main/java/me/jessyan/progressmanager/ProgressManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="44" column="10" selection-start-line="44" selection-start-column="10" selection-end-line="44" selection-end-column="10" />
+          <folding>
+            <marker date="1496914605000" expanded="false" signature="44:450" ph="..." />
+            <marker date="1496914605000" expanded="true" signature="452:874" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="1386:1711" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="1477:1590" ph="(Interceptor) (chain) → {" />
+            <marker date="1496914605000" expanded="false" signature="1689:1704" ph="}" />
+            <marker date="1496914605000" expanded="true" signature="1762:2045" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="2051:2193" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="2268:2661" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="2667:2809" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="2885:3280" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="3286:3397" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="3465:3549" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="3555:3743" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="3796:4271" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="4277:4467" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="4524:4999" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="75" column="29" selection-start-line="75" selection-start-column="29" selection-end-line="75" selection-end-column="29" />
+          <folding>
+            <marker date="1496914605000" expanded="false" signature="49:796" ph="..." />
+            <marker date="1496914605000" expanded="true" signature="1794:2159" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="2190:2985" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="3019:3389" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="3459:3926" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="3476:3586" ph="(progressInfo) → {" />
+            <marker date="1496914605000" expanded="false" signature="3904:3919" ph="}" />
+            <marker date="1496914605000" expanded="true" signature="3990:5214" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="4007:4117" ph="(progressInfo) → {" />
+            <marker date="1496914605000" expanded="true" signature="4134:4307" ph="//..." />
+            <marker date="1496914605000" expanded="false" signature="5192:5207" ph="}" />
+            <marker date="1496914605000" expanded="true" signature="5280:6411" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="5297:5407" ph="(progressInfo) → {" />
+            <marker date="1496914605000" expanded="true" signature="5424:5597" ph="//..." />
+            <marker date="1496914605000" expanded="false" signature="6389:6404" ph="}" />
+            <marker date="1496914605000" expanded="true" signature="6460:6778" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="6784:6862" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="6894:7731" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="7379:7449" ph="(Runnable) () → {" />
+            <marker date="1496914605000" expanded="false" signature="7700:7715" ph="}" />
+            <marker date="1496914605000" expanded="true" signature="7737:7815" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="7849:8367" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="7986:8056" ph="(Runnable) () → {" />
+            <marker date="1496914605000" expanded="false" signature="8336:8351" ph="}" />
+            <marker date="1496914605000" expanded="true" signature="8373:8486" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="8517:8757" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="8841:9105" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/MainFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="65" column="29" selection-start-line="65" selection-start-column="29" selection-end-line="65" selection-end-column="29" />
+          <folding>
+            <marker date="1496914605000" expanded="false" signature="49:746" ph="..." />
+            <marker date="1496914605000" expanded="true" signature="748:836" ph="/**...*/" />
+            <marker date="1496914605000" expanded="true" signature="1318:1341" ph="@{...}" />
+            <marker date="1496914605000" expanded="true" signature="1464:1577" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="1665:1765" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="1796:2341" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="2371:2738" ph="{...}" />
+            <marker date="1496914605000" expanded="true" signature="2809:3943" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="2826:2936" ph="(progressInfo) → {" />
+            <marker date="1496914605000" expanded="true" signature="2953:3126" ph="//..." />
+            <marker date="1496914605000" expanded="false" signature="3921:3936" ph="}" />
+            <marker date="1496914605000" expanded="true" signature="4009:5140" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="4026:4136" ph="(progressInfo) → {" />
+            <marker date="1496914605000" expanded="true" signature="4153:4326" ph="//..." />
+            <marker date="1496914605000" expanded="false" signature="5118:5133" ph="}" />
+            <marker date="1496914605000" expanded="true" signature="5203:5668" ph="{...}" />
+            <marker date="1496914605000" expanded="false" signature="5220:5330" ph="(progressInfo) → {" />
+            <marker date="1496914605000" expanded="false" signature="5646:5661" ph="}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/GlideConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="26" column="62" selection-start-line="26" selection-start-column="62" selection-end-line="26" selection-end-column="62" />
+          <folding>
+            <marker date="1496909405000" expanded="false" signature="49:332" ph="..." />
+            <marker date="1496909405000" expanded="true" signature="334:422" ph="/**...*/" />
+            <marker date="1496909405000" expanded="true" signature="563:571" ph="{...}" />
+            <marker date="1496909405000" expanded="true" signature="652:951" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/jessyan/progressmanager/demo/BaseApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="21" column="25" selection-start-line="20" selection-start-column="13" selection-end-line="21" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
           <folding />
         </state>
       </provider>

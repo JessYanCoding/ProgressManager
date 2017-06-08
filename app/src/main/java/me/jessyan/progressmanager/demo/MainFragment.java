@@ -64,7 +64,7 @@ public class MainFragment extends Fragment {
     }
 
     private void initData() {
-        //Activity 中的 Glide 下载监听
+        //Glide 加载监听
         ProgressManager.getInstance().addResponseListener(IMAGE_URL, getGlideListener());
 
         //Okhttp/Retofit 下载监听
