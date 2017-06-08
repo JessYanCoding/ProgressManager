@@ -1,0 +1,25 @@
+apply plugin: 'com.novoda.bintray-release'
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+    tasks.withType(Javadoc) {
+        options{ encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
+}
+
+
+def siteUrl = 'https://github.com/JessYanCoding/ProgressManager'   // 项目的主页
+
+publish {
+    userOrg = 'jessyancoding'      //bintray注册的用户名
+    groupId = 'me.jessyan'         //compile引用时的第1部分groupId
+    artifactId = 'progressmanager'     //compile引用时的第2部分项目名
+    publishVersion = rootProject.versionName    //compile引用时的第3部分版本号
+    desc = 'Listen the progress of downloading and uploading in Okhttp (compatible Retrofit and Glide).'
+    website = siteUrl
+}

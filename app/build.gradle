@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
     defaultConfig {
         applicationId "me.jessyan.progressmanager.demo"
-        minSdkVersion 14
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -16,6 +16,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        abortOnError false
+        warning 'InvalidPackage'
     }
 }
 
@@ -25,5 +29,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
-    compile project(':manager')
+    compile project(':progress')
+//    compile 'me.jessyan:progressmanager:1.0'
 }

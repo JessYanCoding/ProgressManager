@@ -1,1 +1,1 @@
-include ':app', ':manager'
+include ':app', ':progress'

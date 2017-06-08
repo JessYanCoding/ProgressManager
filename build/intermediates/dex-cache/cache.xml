@@ -3,21 +3,12 @@
 
     <item
         is-multidex="false"
-        jar="/Users/jess/AndroidStudioProjects/ProgressManager/manager/build/intermediates/bundles/default/classes.jar"
+        jar="/Users/jess/AndroidStudioProjects/ProgressManager/progress/build/intermediates/bundles/default/classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.3"
         sha1="b04f61d10a2d4adced4911a2dbccb5f3f79c968c">
-        <dex dex="/Users/jess/AndroidStudioProjects/ProgressManager/app/build/intermediates/pre-dexed/debug/classes_7715f70a9e609ec030bd784cd490d486a2284f99.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Users/jess/.android/build-cache/47307ab71554817a2d39765baab4878925342f13/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.3"
-        sha1="07a1832fdb6b44c0f4ec761ac3de02bfd3508269">
-        <dex dex="/Users/jess/AndroidStudioProjects/ProgressManager/app/build/intermediates/pre-dexed/debug/classes_162377287a28b6a503c0dab1e10d4cc0a22f9f8a.jar" />
+        <dex dex="/Users/jess/AndroidStudioProjects/ProgressManager/app/build/intermediates/pre-dexed/debug/classes_fd77c4b08d92198205f31e13bc37499d24e114b8.jar" />
     </item>
 
 </items>
