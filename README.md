@@ -13,24 +13,24 @@
 
 
 ## Introduction
-ProgressManager 一行代码即可监听 App 中所有网络链接的上传以及下载进度,包括 Glide的图片加载进度,实现原理类似 EventBus,你可在 App 中的任何地方,将多个监听器,以 Url 地址作为标识符,注册到本框架,当此 Url 地址存在下载或者上传的动作时,会主动调用所有使用此 Url 地址注册过的监听器,达到多个模块的同步更新
+**ProgressManager** 一行代码即可监听 **App** 中所有网络链接的上传以及下载进度,包括 **Glide** 的图片加载进度,实现原理类似 **EventBus**,你可在 **App** 中的任何地方,将多个监听器,以 **Url** 地址作为标识符,注册到本框架,当此 **Url** 地址存在下载或者上传的动作时,会主动调用所有使用此 **Url** 地址注册过的监听器,达到多个模块的同步更新
 
 
 ## Download
-```
+``` gradle
  compile 'me.jessyan:progressmanager:1.0'
 ```
 
 ## Usage
 ### Step 1
-```
+``` java
  //构建 OkHttpClient 时,将 OkHttpClient.Builder() 传入 with() 方法,进行初始化配置
  OkHttpClient = ProgressManager.getInstance().with(new OkHttpClient.Builder())
                 .build();
 ```
 
 ### Step 2
-```
+``` java
  //Glide 下载监听
  ProgressManager.getInstance().addResponseListener(IMAGE_URL, getGlideListener());
 
