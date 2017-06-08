@@ -18,7 +18,7 @@ ProgressManager 一行代码即可监听 App 中所有网络链接的上传以�
 
 ## Download
 ```
-    compile 'me.jessyan:progressmanager:1.0'
+ compile 'me.jessyan:progressmanager:1.0'
 ```
 
 ## Usage
