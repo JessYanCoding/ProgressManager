@@ -18,24 +18,19 @@ ProgressManager 一行代码即可监听 App 中所有网络链接的上传以�
 
 ## Download
 ```
-
     compile 'me.jessyan:progressmanager:1.0'
-
 ```
 
 ## Usage
 ### Step 1
 ```
-
  //构建 OkHttpClient 时,将 OkHttpClient.Builder() 传入 with() 方法,进行初始化配置
  OkHttpClient = ProgressManager.getInstance().with(new OkHttpClient.Builder())
                 .build();
-
 ```
 
 ### Step 2
 ```
-
  //Glide 下载监听
  ProgressManager.getInstance().addResponseListener(IMAGE_URL, getGlideListener());
 
@@ -46,16 +41,13 @@ ProgressManager 一行代码即可监听 App 中所有网络链接的上传以�
 
  //Okhttp/Retofit 上传监听
  ProgressManager.getInstance().addRequestLisenter(UPLOAD_URL, getUploadListener());
-
 ```
 
 
 ## ProGuard
 ```
-
--keep class me.jessyan.progressmanager.** { *; }
--keep interface me.jessyan.progressmanager.** { *; }
-
+ -keep class me.jessyan.progressmanager.** { *; }
+ -keep interface me.jessyan.progressmanager.** { *; }
 ```
 
 
