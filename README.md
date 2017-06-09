@@ -14,13 +14,13 @@
 
 
 ## Feature
-* Easy to use, just a line of code to listen progress
-* Low coupling, the actual request and the progress of the receiver does not exist directly or indirectly, that can be anywhere in **App** to receive progress information
-* Low intrusion, use this framework you do not need to change the code before uploading or downloading, ie using or not using this framework does not affect the original code
-* Multi-end synchronization, the same data source upload or download progress can specify a number of different receivers, less to use **EventBus** achieve multiple port synchronization update progress
-* Automatic management of the listener, less to manually cancel the trouble of the listener
-* The default run in the main line layer, less to switch the thread of trouble
-* Multi-platform support, support **Okhttp**, **Retrofit**, **Glide**
+* Easy to use, just a line of code to listen progress.
+* Low coupling, the actual request and the progress of the receiver does not exist directly or indirectly, that can be anywhere in **App** to receive progress information.
+* Low intrusion, use this framework you do not need to change the code before uploading or downloading, ie using or not using this framework does not affect the original code.
+* Multi-end synchronization, the same data source upload or download progress can specify a number of different receivers, less to use **EventBus** achieve multiple port synchronization update progress.
+* Automatic management of the listener, less to manually cancel the trouble of the listener.
+* The default run in the main line layer, less to switch the thread of trouble.
+* Multi-platform support, support **Okhttp**, **Retrofit**, **Glide**.
 
 ## Download
 ``` gradle
