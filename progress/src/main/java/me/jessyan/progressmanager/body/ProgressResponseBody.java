@@ -25,13 +25,13 @@ public class ProgressResponseBody extends ResponseBody {
 
     private Handler mHandler;
     private final ResponseBody mDelegate;
-    private final List<ProgressListener> mListeners;
+    private final ProgressListener[] mListeners;
     private BufferedSource bufferedSource;
     protected ProgressInfo mProgressInfo;
 
     public ProgressResponseBody(Handler handler, ResponseBody responseBody, List<ProgressListener> listeners) {
         this.mDelegate = responseBody;
-        this.mListeners = listeners;
+        this.mListeners = listeners.toArray(new ProgressListener[listeners.size()]);
         this.mHandler = handler;
         this.mProgressInfo = new ProgressInfo(System.currentTimeMillis());
     }
@@ -66,14 +66,16 @@ public class ProgressResponseBody extends ResponseBody {
                 if (mListeners != null) {
                     mProgressInfo.setCurrentbytes(totalBytesRead);
                     mProgressInfo.setContentLength(contentLength());
-                    for (final ProgressListener listener : mListeners) {
+                    for (int i = 0; i < mListeners.length; i++) {
+                        final int finalI = i;
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                listener.onProgress(mProgressInfo);
+                                mListeners[finalI].onProgress(mProgressInfo);
                             }
                         });
                     }
+
                 }
                 return bytesRead;
             }

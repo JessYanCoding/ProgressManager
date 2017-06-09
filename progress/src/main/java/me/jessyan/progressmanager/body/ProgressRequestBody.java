@@ -23,15 +23,15 @@ import okio.Sink;
 
 public class ProgressRequestBody extends RequestBody {
 
-    protected RequestBody mDelegate;
-    protected List<ProgressListener> mListeners;
-    protected CountingSink mCountingSink;
     protected Handler mHandler;
+    protected RequestBody mDelegate;
+    protected ProgressListener[] mListeners;
+    protected CountingSink mCountingSink;
     protected ProgressInfo mProgressInfo;
 
     public ProgressRequestBody(Handler handler, RequestBody delegate, List<ProgressListener> listeners) {
         this.mDelegate = delegate;
-        this.mListeners = listeners;
+        this.mListeners = listeners.toArray(new ProgressListener[listeners.size()]);
         this.mHandler = handler;
         this.mProgressInfo = new ProgressInfo(System.currentTimeMillis());
     }
@@ -73,14 +73,16 @@ public class ProgressRequestBody extends RequestBody {
             if (mListeners != null) {
                 mProgressInfo.setCurrentbytes(totalBytesRead);
                 mProgressInfo.setContentLength(contentLength());
-                for (final ProgressListener listener : mListeners) {
+                for (int i = 0; i < mListeners.length; i++) {
+                    final int finalI = i;
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            listener.onProgress(mProgressInfo);
+                            mListeners[finalI].onProgress(mProgressInfo);
                         }
                     });
                 }
+
             }
         }
     }
