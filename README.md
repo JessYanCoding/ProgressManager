@@ -21,6 +21,7 @@
 * Automatic management of the listener, less to manually cancel the trouble of the listener.
 * The default run in the main line layer, less to switch the thread of trouble.
 * Multi-platform support, support **Okhttp**, **Retrofit**, **Glide**.
+* Lightweight framework, does not contain any three-party library, very small size.
 
 ## Download
 ``` gradle
