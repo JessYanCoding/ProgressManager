@@ -1,5 +1,5 @@
 # ProgressManager
-[ ![Bintray](https://img.shields.io/badge/bintray-v1.0-brightgreen.svg) ](https://bintray.com/jessyancoding/maven/progressmanager/1.0/link)
+[ ![Bintray](https://img.shields.io/badge/bintray-v1.1-brightgreen.svg) ](https://bintray.com/jessyancoding/maven/progressmanager/1.1/link)
 [ ![Build Status](https://travis-ci.org/JessYanCoding/ProgressManager.svg?branch=master) ](https://travis-ci.org/JessYanCoding/ProgressManager)
 [ ![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat-square) ](https://developer.android.com/about/versions/android-4.0.html)
 [ ![License](http://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square) ](http://www.apache.org/licenses/LICENSE-2.0)
@@ -13,12 +13,12 @@
 
 
 ## Introduction
-**ProgressManager** 一行代码即可监听 **App** 中所有网络链接的上传以及下载进度,包括 **Glide** 的图片加载进度,实现原理类似 **EventBus**,你可在 **App** 中的任何地方,将多个监听器,以 **Url** 地址作为标识符,注册到本框架,当此 **Url** 地址存在下载或者上传的动作时,会主动调用所有使用此 **Url** 地址注册过的监听器,达到多个模块的同步更新
+**ProgressManager** 一行代码即可监听 **App** 中所有网络链接的上传以及下载进度,包括 **Glide** 的图片加载进度,实现原理类似 **EventBus**,你可在 **App** 中的任何地方,将多个监听器,以 **Url** 地址作为标识符,注册到本框架,当此 **Url** 地址存在下载或者上传的动作时,框架会主动调用所有使用此 **Url** 地址注册过的监听器,达到多个模块的同步更新
 
 
 ## Download
 ``` gradle
- compile 'me.jessyan:progressmanager:1.0'
+ compile 'me.jessyan:progressmanager:1.1'
 ```
 
 ## Usage

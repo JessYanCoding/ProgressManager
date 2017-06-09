@@ -20,7 +20,7 @@ import okhttp3.Response;
  * ProgressManager 一行代码即可监听 App 中所有网络链接的上传以及下载进度,包括 Glide(需要将下载引擎切换为 Okhttp)的图片加载进度,
  * 基于 Okhttp Interceptor,所以使用前请确保你使用 Okhttp 或 Retrofit 进行网络请求
  * 实现原理类似 EventBus,你可在 App 中的任何地方,将多个监听器,以 Url 地址作为标识符,注册到本管理器
- * 当此 Url 地址存在下载或者上传的动作时,会主动调用所有使用此 Url 地址注册过的监听器,达到多个模块的同步更新
+ * 当此 Url 地址存在下载或者上传的动作时,管理器会主动调用所有使用此 Url 地址注册过的监听器,达到多个模块的同步更新
  * 因为是通过 Url 作为唯一标识符,所以如果出现请求被重定向其他页面进行上传或者下载,那么就会出现获取不到进度的情况
  * Created by jess on 02/06/2017 18:37
  * Contact with jess.yan.effort@gmail.com
@@ -35,6 +35,20 @@ public final class ProgressManager {
 
     private static volatile ProgressManager mProgressManager;
 
+    public static final boolean DEPENDENCY_OKHTTP;
+
+    static {
+        boolean hasDependency;
+        try {
+            Class.forName("okhttp3.OkHttpClient");
+            hasDependency = true;
+        } catch (ClassNotFoundException e) {
+            hasDependency = false;
+        }
+        DEPENDENCY_OKHTTP = hasDependency;
+    }
+
+
     private ProgressManager() {
         this.mHandler = new Handler(Looper.getMainLooper());
         this.mInterceptor = new Interceptor() {
@@ -48,6 +62,9 @@ public final class ProgressManager {
 
     public static ProgressManager getInstance() {
         if (mProgressManager == null) {
+            if (!DEPENDENCY_OKHTTP) { //使用本管理器必须依赖 Okhttp
+                throw new IllegalStateException("Must be dependency Okhttp");
+            }
             synchronized (ProgressManager.class) {
                 if (mProgressManager == null) {
                     mProgressManager = new ProgressManager();
