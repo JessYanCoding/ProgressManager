@@ -24,10 +24,10 @@ import okio.Sink;
 public class ProgressRequestBody extends RequestBody {
 
     protected Handler mHandler;
-    protected RequestBody mDelegate;
-    protected ProgressListener[] mListeners;
-    protected CountingSink mCountingSink;
-    protected ProgressInfo mProgressInfo;
+    protected final RequestBody mDelegate;
+    protected final ProgressListener[] mListeners;
+    protected final ProgressInfo mProgressInfo;
+    private CountingSink mCountingSink;
 
     public ProgressRequestBody(Handler handler, RequestBody delegate, List<ProgressListener> listeners) {
         this.mDelegate = delegate;

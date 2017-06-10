@@ -23,11 +23,11 @@ import okio.Source;
 
 public class ProgressResponseBody extends ResponseBody {
 
-    private Handler mHandler;
-    private final ResponseBody mDelegate;
-    private final ProgressListener[] mListeners;
+    protected Handler mHandler;
+    protected final ResponseBody mDelegate;
+    protected final ProgressListener[] mListeners;
+    protected final ProgressInfo mProgressInfo;
     private BufferedSource bufferedSource;
-    protected ProgressInfo mProgressInfo;
 
     public ProgressResponseBody(Handler handler, ResponseBody responseBody, List<ProgressListener> listeners) {
         this.mDelegate = responseBody;
