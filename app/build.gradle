@@ -30,5 +30,5 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
     compile project(':progress')
-//    compile 'me.jessyan:progressmanager:1.2'
+//    compile 'me.jessyan:progressmanager:1.2.1'
 }
