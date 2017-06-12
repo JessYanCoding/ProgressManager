@@ -13,6 +13,9 @@
 ## Overview
 ![gif](arts/progressManager.gif)
 
+## Introduction
+**ProgressManager** a line of code to listen **App** all the links and upload the progress of the network, including **Glide** picture loading progress, to achieve the principle of similar **EventBus**, you can be in anywhere in **App**, the number of listeners to **Url** address as an identifier, registered to the framework, when this **Url** address haves to download or upload the action, the framework will take the initiative to call All listeners registered with this **Url** address are synchronized to multiple modules.
+
 
 ## Feature
 * Easy to use, just a line of code to listen progress.
