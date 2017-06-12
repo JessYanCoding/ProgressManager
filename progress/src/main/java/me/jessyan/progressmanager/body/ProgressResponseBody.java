@@ -27,7 +27,7 @@ public class ProgressResponseBody extends ResponseBody {
     protected final ResponseBody mDelegate;
     protected final ProgressListener[] mListeners;
     protected final ProgressInfo mProgressInfo;
-    private BufferedSource bufferedSource;
+    private BufferedSource mBufferedSource;
 
     public ProgressResponseBody(Handler handler, ResponseBody responseBody, List<ProgressListener> listeners) {
         this.mDelegate = responseBody;
@@ -48,24 +48,37 @@ public class ProgressResponseBody extends ResponseBody {
 
     @Override
     public BufferedSource source() {
-        if (bufferedSource == null) {
-            bufferedSource = Okio.buffer(source(mDelegate.source()));
+        if (mBufferedSource == null) {
+            mBufferedSource = Okio.buffer(source(mDelegate.source()));
         }
-        return bufferedSource;
+        return mBufferedSource;
     }
 
     private Source source(Source source) {
         return new ForwardingSource(source) {
-            long totalBytesRead = 0L;
+            private long totalBytesRead = 0L;
+            private long contentLength = 0L;
 
             @Override
             public long read(Buffer sink, long byteCount) throws IOException {
-                long bytesRead = super.read(sink, byteCount);
+                long bytesRead = 0L;
+                try {
+                    bytesRead = super.read(sink, byteCount);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    for (int i = 0; i < mListeners.length; i++) {
+                        mListeners[i].onError(mProgressInfo.getId(),e);
+                    }
+                    throw e;
+                }
+                if (contentLength == 0){ //避免重复调用 contentLength()
+                    contentLength = contentLength();
+                }
                 // read() returns the number of bytes read, or -1 if this source is exhausted.
                 totalBytesRead += bytesRead != -1 ? bytesRead : 0;
                 if (mListeners != null) {
                     mProgressInfo.setCurrentbytes(totalBytesRead);
-                    mProgressInfo.setContentLength(contentLength());
+                    mProgressInfo.setContentLength(contentLength);
                     for (int i = 0; i < mListeners.length; i++) {
                         final int finalI = i;
                         mHandler.post(new Runnable() {

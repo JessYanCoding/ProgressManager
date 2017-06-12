@@ -12,4 +12,6 @@ public interface ProgressListener {
      * @param progressInfo
      */
     void onProgress(ProgressInfo progressInfo);
+
+    void onError(long id, Exception e);
 }

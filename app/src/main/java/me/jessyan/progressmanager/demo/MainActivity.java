@@ -1,6 +1,7 @@
 package me.jessyan.progressmanager.demo;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -44,12 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ProgressInfo mLastDownloadingInfo;
     private ProgressInfo mLastUploadingingInfo;
+    private Handler mHandler;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mOkHttpClient = ((BaseApplication) getApplicationContext()).getOkHttpClient();
+        mHandler = new Handler();
         initView();
         initListener();
         //在 Activity 中显示进度条的同时,也在 Fragment 中显示,为了展示此框架的多端同步更新某一个进度信息
@@ -101,6 +104,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mGlideProgressText.setText(progress + "%");
                 Log.d(TAG, progressInfo.getId() + "--glide--" + progress + " %");
             }
+
+            @Override
+            public void onError(long id, Exception e) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGlideProgress.setProgress(0);
+                        mGlideProgressText.setText("error");
+                    }
+                });
+            }
         };
     }
 
@@ -130,6 +144,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mUploadProgressText.setText(progress + "%");
                 Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %  " +mLastUploadingingInfo.getCurrentbytes() +"  "+mLastUploadingingInfo.getContentLength());
             }
+
+            @Override
+            public void onError(long id, Exception e) {
+
+            }
         };
     }
 
@@ -157,6 +176,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mDownloadProgress.setProgress(progress);
                 mDownloadProgressText.setText(progress + "%");
                 Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " %");
+            }
+
+            @Override
+            public void onError(long id, Exception e) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDownloadProgress.setProgress(0);
+                        mDownloadProgressText.setText("error");
+                    }
+                });
             }
         };
     }

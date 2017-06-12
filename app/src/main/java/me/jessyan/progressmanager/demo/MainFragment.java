@@ -1,6 +1,7 @@
 package me.jessyan.progressmanager.demo;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,6 +38,7 @@ public class MainFragment extends Fragment {
 
     private ProgressInfo mLastDownloadingInfo;
     private ProgressInfo mLastUploadingingInfo;
+    private Handler mHandler;
 
     @Nullable
     @Override
@@ -49,6 +51,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mHandler = new Handler();
         initView();
         initData();
     }
@@ -107,6 +110,11 @@ public class MainFragment extends Fragment {
                 mUploadProgressText.setText(progress + "%");
                 Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %");
             }
+
+            @Override
+            public void onError(long id, Exception e) {
+
+            }
         };
     }
 
@@ -135,6 +143,17 @@ public class MainFragment extends Fragment {
                 mDownloadProgressText.setText(progress + "%");
                 Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " %");
             }
+
+            @Override
+            public void onError(long id, Exception e) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDownloadProgress.setProgress(0);
+                        mDownloadProgressText.setText("error");
+                    }
+                });
+            }
         };
     }
 
@@ -147,6 +166,17 @@ public class MainFragment extends Fragment {
                 mGlideProgress.setProgress(progress);
                 mGlideProgressText.setText(progress + "%");
                 Log.d(TAG, progressInfo.getId() + "--glide--"+progress + " %");
+            }
+
+            @Override
+            public void onError(long id, Exception e) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGlideProgress.setProgress(0);
+                        mGlideProgressText.setText("error");
+                    }
+                });
             }
         };
     }
