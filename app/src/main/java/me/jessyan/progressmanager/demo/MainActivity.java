@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int progress = (int) ((100 * mLastDownloadingInfo.getCurrentbytes()) / mLastDownloadingInfo.getContentLength());
                 mDownloadProgress.setProgress(progress);
                 mDownloadProgressText.setText(progress + "%");
-                Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " %");
+                Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " % " + mLastDownloadingInfo.getCurrentbytes() + "  " + mLastDownloadingInfo.getContentLength());
             }
 
             @Override
@@ -211,24 +211,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 点击开始上传资源,为了演示,就不做重复点击的处理,即允许用户在还有进度没完成的情况下,使用同一个 url 开始新的上传
      */
     private void uploadStart() {
-        File file = new File(getCacheDir(), "a.java");
-        try {
-            //读取Assets里面的数据,作为上传源数据
-            writeToFile(getAssets().open("a.java"), file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        final Request request = new Request.Builder()
-                .url(UPLOAD_URL)
-                .post(RequestBody.create(MediaType.parse("multipart/form-data"), file))
-                .build();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+
+                    File file = new File(getCacheDir(), "a.java");
+                    //读取Assets里面的数据,作为上传源数据
+                    writeToFile(getAssets().open("a.java"), file);
+
+                    Request request = new Request.Builder()
+                            .url(UPLOAD_URL)
+                            .post(RequestBody.create(MediaType.parse("multipart/form-data"), file))
+                            .build();
+
                     Response response = mOkHttpClient.newCall(request).execute();
                     response.body();
                 } catch (IOException e) {
