@@ -113,7 +113,13 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onError(long id, Exception e) {
-
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mUploadProgress.setProgress(0);
+                        mUploadProgressText.setText("error");
+                    }
+                });
             }
         };
     }

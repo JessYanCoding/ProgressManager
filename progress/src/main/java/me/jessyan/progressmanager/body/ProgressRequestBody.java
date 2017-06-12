@@ -56,13 +56,20 @@ public class ProgressRequestBody extends RequestBody {
         if (mBufferedSink == null) {
             mBufferedSink = Okio.buffer(new CountingSink(sink));
         }
-        mDelegate.writeTo(mBufferedSink);
-        mBufferedSink.flush();
+        try {
+            mDelegate.writeTo(mBufferedSink);
+            mBufferedSink.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            for (int i = 0; i < mListeners.length; i++) {
+                mListeners[i].onError(mProgressInfo.getId(), e);
+            }
+            throw e;
+        }
     }
 
     protected final class CountingSink extends ForwardingSink {
         private long totalBytesRead = 0L;
-        private long contentLength = 0L;
 
         public CountingSink(Sink delegate) {
             super(delegate);
@@ -70,14 +77,21 @@ public class ProgressRequestBody extends RequestBody {
 
         @Override
         public void write(Buffer source, long byteCount) throws IOException {
-            super.write(source, byteCount);
-            if (contentLength == 0){ //避免重复调用 contentLength()
-                contentLength = contentLength();
+            try {
+                super.write(source, byteCount);
+            } catch (IOException e) {
+                e.printStackTrace();
+                for (int i = 0; i < mListeners.length; i++) {
+                    mListeners[i].onError(mProgressInfo.getId(), e);
+                }
+                throw e;
+            }
+            if (mProgressInfo.getContentLength() == 0) { //避免重复调用 contentLength()
+                mProgressInfo.setContentLength(contentLength());
             }
             totalBytesRead += byteCount;
             if (mListeners != null) {
                 mProgressInfo.setCurrentbytes(totalBytesRead);
-                mProgressInfo.setContentLength(contentLength);
                 for (int i = 0; i < mListeners.length; i++) {
                     final int finalI = i;
                     mHandler.post(new Runnable() {

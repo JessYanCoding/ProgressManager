@@ -88,12 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
-
-
-
-
     @NonNull
     private ProgressListener getGlideListener() {
         return new ProgressListener() {
@@ -142,12 +136,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int progress = (int) ((100 * mLastUploadingingInfo.getCurrentbytes()) / mLastUploadingingInfo.getContentLength());
                 mUploadProgress.setProgress(progress);
                 mUploadProgressText.setText(progress + "%");
-                Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %  " +mLastUploadingingInfo.getCurrentbytes() +"  "+mLastUploadingingInfo.getContentLength());
+                Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %  " + mLastUploadingingInfo.getCurrentbytes() + "  " + mLastUploadingingInfo.getContentLength());
             }
 
             @Override
             public void onError(long id, Exception e) {
-
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mUploadProgress.setProgress(0);
+                        mUploadProgressText.setText("error");
+                    }
+                });
             }
         };
     }

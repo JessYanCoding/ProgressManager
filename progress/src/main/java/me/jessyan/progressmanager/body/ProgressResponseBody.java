@@ -57,7 +57,6 @@ public class ProgressResponseBody extends ResponseBody {
     private Source source(Source source) {
         return new ForwardingSource(source) {
             private long totalBytesRead = 0L;
-            private long contentLength = 0L;
 
             @Override
             public long read(Buffer sink, long byteCount) throws IOException {
@@ -67,18 +66,17 @@ public class ProgressResponseBody extends ResponseBody {
                 } catch (IOException e) {
                     e.printStackTrace();
                     for (int i = 0; i < mListeners.length; i++) {
-                        mListeners[i].onError(mProgressInfo.getId(),e);
+                        mListeners[i].onError(mProgressInfo.getId(), e);
                     }
                     throw e;
                 }
-                if (contentLength == 0){ //避免重复调用 contentLength()
-                    contentLength = contentLength();
+                if (mProgressInfo.getContentLength() == 0) { //避免重复调用 contentLength()
+                    mProgressInfo.setContentLength(contentLength());
                 }
                 // read() returns the number of bytes read, or -1 if this source is exhausted.
                 totalBytesRead += bytesRead != -1 ? bytesRead : 0;
                 if (mListeners != null) {
                     mProgressInfo.setCurrentbytes(totalBytesRead);
-                    mProgressInfo.setContentLength(contentLength);
                     for (int i = 0; i < mListeners.length; i++) {
                         final int finalI = i;
                         mHandler.post(new Runnable() {
