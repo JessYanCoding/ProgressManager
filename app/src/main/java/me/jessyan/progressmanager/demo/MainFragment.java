@@ -91,7 +91,7 @@ public class MainFragment extends Fragment {
             public void onProgress(ProgressInfo progressInfo) {
                 // 如果你不屏蔽用户重复点击上传或下载按钮,就可能存在同一个 Url 地址,上一次的上传或下载操作都还没结束,
                 // 又开始了新的上传或下载操作,那现在就需要用到 id(请求开始时的时间) 来区分正在执行的进度信息
-                // 这里我就取最新的上传操作用来展示,顺便展示下 id 的用法
+                // 这里我就取最新的上传进度用来展示,顺便展示下 id 的用法
 
                 if (mLastUploadingingInfo == null) {
                     mLastUploadingingInfo = progressInfo;
@@ -131,7 +131,7 @@ public class MainFragment extends Fragment {
             public void onProgress(ProgressInfo progressInfo) {
                 // 如果你不屏蔽用户重复点击上传或下载按钮,就可能存在同一个 Url 地址,上一次的上传或下载操作都还没结束,
                 // 又开始了新的上传或下载操作,那现在就需要用到 id(请求开始时的时间) 来区分正在执行的进度信息
-                // 这里我就取最新的下载操作用来展示,顺便展示下 id 的用法
+                // 这里我就取最新的下载进度用来展示,顺便展示下 id 的用法
 
                 if (mLastDownloadingInfo == null) {
                     mLastDownloadingInfo = progressInfo;
