@@ -1,5 +1,5 @@
 # ProgressManager
-[ ![Bintray](https://img.shields.io/badge/bintray-v1.2.1-brightgreen.svg) ](https://bintray.com/jessyancoding/maven/progressmanager/1.2.1/link)
+[ ![Bintray](https://img.shields.io/badge/bintray-v1.2.3-brightgreen.svg) ](https://bintray.com/jessyancoding/maven/progressmanager/1.2.3/link)
 [ ![Build Status](https://travis-ci.org/JessYanCoding/ProgressManager.svg?branch=master) ](https://travis-ci.org/JessYanCoding/ProgressManager)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ProgressManager-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5865)
 [ ![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat-square) ](https://developer.android.com/about/versions/android-4.0.html)
@@ -30,7 +30,7 @@
 
 ## Download
 ``` gradle
- compile 'me.jessyan:progressmanager:1.2.1'
+ compile 'me.jessyan:progressmanager:1.2.3'
 ```
 
 ## Usage
