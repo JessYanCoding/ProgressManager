@@ -1,5 +1,5 @@
 # ProgressManager
-[ ![Bintray](https://img.shields.io/badge/bintray-v1.2.3-brightgreen.svg) ](https://bintray.com/jessyancoding/maven/progressmanager/1.2.3/link)
+[ ![Bintray](https://img.shields.io/badge/bintray-v1.2.4-brightgreen.svg) ](https://bintray.com/jessyancoding/maven/progressmanager/1.2.4/link)
 [ ![Build Status](https://travis-ci.org/JessYanCoding/ProgressManager.svg?branch=master) ](https://travis-ci.org/JessYanCoding/ProgressManager)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ProgressManager-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5865)
 [ ![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat-square) ](https://developer.android.com/about/versions/android-4.0.html)
@@ -20,7 +20,7 @@
 
 ## Feature
 * 使用简单,只需一行代码即可实现进度监听.
-* 多平台支持,支持 **Okhttp** , **Retrofit** , **Glide**.
+* 多平台支持,支持 **Okhttp** , **Retrofit** , **Glide** ,使用 **Okhttp** 原生 **Api** ,不存在兼容问题.
 * 低耦合,实际请求端和进度接收端并不存在直接或间接的关联关系,即可以在 **App** 任何地方接收进度信息.
 * 侵入性低,使用本框架你并不需要更改之前进行上传或下载的代码,即使用或不使用本框架并不会影响到原有的代码.
 * 多端同步,同一个数据源的上传或下载进度可以指定多个不同的接收端,少去了使用 **EventBus** 实现多个端口同步更新进度.
@@ -30,7 +30,7 @@
 
 ## Download
 ``` gradle
- compile 'me.jessyan:progressmanager:1.2.3'
+ compile 'me.jessyan:progressmanager:1.2.4'
 ```
 
 ## Usage
