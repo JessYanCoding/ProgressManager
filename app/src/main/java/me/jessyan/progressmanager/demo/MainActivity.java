@@ -230,6 +230,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     response.body();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
+                    ProgressManager.getInstance().notifyOnErorr(UPLOAD_URL, e);
                 }
             }
         }).start();
@@ -239,14 +241,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 点击开始下载资源,为了演示,就不做重复点击的处理,即允许用户在还有进度没完成的情况下,使用同一个 url 开始新的下载
      */
     private void downloadStart() {
-        final Request request = new Request.Builder()
-                .url(DOWNLOAD_URL)
-                .build();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    Request request = new Request.Builder()
+                            .url(DOWNLOAD_URL)
+                            .build();
+
                     Response response = mOkHttpClient.newCall(request).execute();
 
                     InputStream is = response.body().byteStream();
@@ -267,6 +269,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
+                    ProgressManager.getInstance().notifyOnErorr(DOWNLOAD_URL, e);
                 }
             }
         }).start();

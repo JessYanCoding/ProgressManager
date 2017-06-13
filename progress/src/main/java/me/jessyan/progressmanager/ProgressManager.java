@@ -111,6 +111,21 @@ public final class ProgressManager {
         progressListeners.add(listener);
     }
 
+
+    /**
+     * 当在 {@link ProgressRequestBody} 和 {@link ProgressResponseBody} 内部处理二进制流时发生错误
+     * 会主动调用 {@link ProgressListener#onError(long, Exception)},但是有些错误并不是在它们内部发生的
+     * 但同样会引起网络请求的失败,所以向外面提供{@link ProgressManager#notifyOnErorr},当外部发生错误时
+     * 手动调用此方法,以通知所有的监听器
+     *
+     * @param url
+     * @param e
+     */
+    public void notifyOnErorr(String url, Exception e) {
+        forEachListenersOnError(mRequestListeners, url, e);
+        forEachListenersOnError(mResponseListeners, url, e);
+    }
+
     /**
      * 将 {@link okhttp3.OkHttpClient.Builder} 传入,配置一些本管理器需要的参数
      *
@@ -162,6 +177,17 @@ public final class ProgressManager {
                     .build();
         }
         return response;
+    }
+
+
+    private void forEachListenersOnError(Map<String, List<ProgressListener>> map, String url, Exception e) {
+        if (map.containsKey(url)) {
+            List<ProgressListener> progressListeners = map.get(url);
+            ProgressListener[] array = progressListeners.toArray(new ProgressListener[progressListeners.size()]);
+            for (int i = 0; i < array.length; i++) {
+                array[i].onError(-1, e);
+            }
+        }
     }
 
 }
