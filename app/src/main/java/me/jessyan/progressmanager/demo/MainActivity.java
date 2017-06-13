@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     // github 服务器可能下载不稳定
     public static final String IMAGE_URL = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png";
-    public static final String DOWNLOAD_URL = "http://211.162.175.13/files/31170000025FB3A3/speed.myzone.cn/WindowsXP_SP2.exe";
+    public static final String DOWNLOAD_URL = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/MVPArms.gif";
     public static final String UPLOAD_URL = "http://upload.qiniu.com/";
 
     private ImageView mImageView;

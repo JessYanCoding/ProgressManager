@@ -15,6 +15,8 @@ import okio.ForwardingSink;
 import okio.Okio;
 import okio.Sink;
 
+import static me.jessyan.progressmanager.ProgressManager.REFRESH_TIME;
+
 /**
  * 继承于{@link RequestBody},通过此类获取 Okhttp 上传的二进制数据
  * Created by jess on 02/06/2017 18:05
@@ -70,6 +72,7 @@ public class ProgressRequestBody extends RequestBody {
 
     protected final class CountingSink extends ForwardingSink {
         private long totalBytesRead = 0L;
+        private long lastRefreshTime = 0L;  //最后一次刷新的时间
 
         public CountingSink(Sink delegate) {
             super(delegate);
@@ -91,17 +94,20 @@ public class ProgressRequestBody extends RequestBody {
             }
             totalBytesRead += byteCount;
             if (mListeners != null) {
-                mProgressInfo.setCurrentbytes(totalBytesRead);
-                for (int i = 0; i < mListeners.length; i++) {
-                    final int finalI = i;
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mListeners[finalI].onProgress(mProgressInfo);
-                        }
-                    });
+                long curTime = System.currentTimeMillis();
+                if (curTime - lastRefreshTime >= REFRESH_TIME || totalBytesRead == mProgressInfo.getContentLength()) {
+                    mProgressInfo.setCurrentbytes(totalBytesRead);
+                    for (int i = 0; i < mListeners.length; i++) {
+                        final int finalI = i;
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mListeners[finalI].onProgress(mProgressInfo);
+                            }
+                        });
+                    }
+                    lastRefreshTime = System.currentTimeMillis();
                 }
-
             }
         }
     }

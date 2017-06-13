@@ -15,6 +15,8 @@ import okio.ForwardingSource;
 import okio.Okio;
 import okio.Source;
 
+import static me.jessyan.progressmanager.ProgressManager.REFRESH_TIME;
+
 /**
  * 继承于{@link ResponseBody},通过此类获取 Okhttp 下载的二进制数据
  * Created by jess on 02/06/2017 18:25
@@ -57,6 +59,7 @@ public class ProgressResponseBody extends ResponseBody {
     private Source source(Source source) {
         return new ForwardingSource(source) {
             private long totalBytesRead = 0L;
+            private long lastRefreshTime = 0L;  //最后一次刷新的时间
 
             @Override
             public long read(Buffer sink, long byteCount) throws IOException {
@@ -76,17 +79,20 @@ public class ProgressResponseBody extends ResponseBody {
                 // read() returns the number of bytes read, or -1 if this source is exhausted.
                 totalBytesRead += bytesRead != -1 ? bytesRead : 0;
                 if (mListeners != null) {
-                    mProgressInfo.setCurrentbytes(totalBytesRead);
-                    for (int i = 0; i < mListeners.length; i++) {
-                        final int finalI = i;
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mListeners[finalI].onProgress(mProgressInfo);
-                            }
-                        });
+                    long curTime = System.currentTimeMillis();
+                    if (curTime - lastRefreshTime >= REFRESH_TIME || totalBytesRead == mProgressInfo.getContentLength()) {
+                        mProgressInfo.setCurrentbytes(totalBytesRead);
+                        for (int i = 0; i < mListeners.length; i++) {
+                            final int finalI = i;
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mListeners[finalI].onProgress(mProgressInfo);
+                                }
+                            });
+                        }
+                        lastRefreshTime = System.currentTimeMillis();
                     }
-
                 }
                 return bytesRead;
             }

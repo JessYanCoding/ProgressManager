@@ -30,12 +30,13 @@ public final class ProgressManager {
     //WeakHashMap会在java虚拟机回收内存时,找到没被使用的key,将此条目移除,所以不需要手动remove()
     private final Map<String, List<ProgressListener>> mRequestListeners = new WeakHashMap<>();
     private final Map<String, List<ProgressListener>> mResponseListeners = new WeakHashMap<>();
-    private final Handler mHandler;// 所有监听器在 Handler 中被执行,所以可以保证所有监听器在主线程中被执行
+    private final Handler mHandler; //所有监听器在 Handler 中被执行,所以可以保证所有监听器在主线程中被执行
     private final Interceptor mInterceptor;
 
     private static volatile ProgressManager mProgressManager;
 
     public static final boolean DEPENDENCY_OKHTTP;
+    public static int REFRESH_TIME = 150; //回调刷新时间(单位ms),避免高频率调用
 
     static {
         boolean hasDependency;
@@ -76,6 +77,7 @@ public final class ProgressManager {
 
     /**
      * 将需要被监听上传进度的 Url 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
+     *
      * @param url
      * @param listener 当此 Url 地址存在上传的动作时,此监听器将被调用
      */
@@ -93,6 +95,7 @@ public final class ProgressManager {
 
     /**
      * 将需要被监听下载进度的 Url 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
+     *
      * @param url
      * @param listener 当此 Url 地址存在下载的动作时,此监听器将被调用
      */
@@ -110,6 +113,7 @@ public final class ProgressManager {
 
     /**
      * 将 {@link okhttp3.OkHttpClient.Builder} 传入,配置一些本管理器需要的参数
+     *
      * @param builder
      * @return
      */
@@ -121,6 +125,7 @@ public final class ProgressManager {
     /**
      * 将 {@link Request} 传入,配置一些本框架需要的参数,常用于自定义 {@link Interceptor}
      * 如已使用 {@link ProgressManager#with(OkHttpClient.Builder)},就不会用到此方法
+     *
      * @param request
      * @return
      */
@@ -141,6 +146,7 @@ public final class ProgressManager {
     /**
      * 将 {@link Response} 传入,配置一些本框架需要的参数,常用于自定义 {@link Interceptor}
      * 如已使用 {@link ProgressManager#with(OkHttpClient.Builder)},就不会用到此方法
+     *
      * @param response
      * @return
      */
