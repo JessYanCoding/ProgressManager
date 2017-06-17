@@ -1,5 +1,7 @@
 package me.jessyan.progressmanager;
 
+import me.jessyan.progressmanager.body.ProgressInfo;
+
 /**
  * Created by jess on 02/06/2017 18:23
  * Contact with jess.yan.effort@gmail.com

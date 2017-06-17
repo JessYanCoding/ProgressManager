@@ -36,7 +36,7 @@ public final class ProgressManager {
     private static volatile ProgressManager mProgressManager;
 
     public static final boolean DEPENDENCY_OKHTTP;
-    public static int REFRESH_TIME = 150; //回调刷新时间(单位ms),避免高频率调用
+    public static int REFRESH_TIME = 200; //回调刷新时间(单位ms),避免高频率调用
 
     static {
         boolean hasDependency;

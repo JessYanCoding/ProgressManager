@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import me.jessyan.progressmanager.ProgressInfo;
+import me.jessyan.progressmanager.body.ProgressInfo;
 import me.jessyan.progressmanager.ProgressListener;
 import me.jessyan.progressmanager.ProgressManager;
 
@@ -105,7 +105,7 @@ public class MainFragment extends Fragment {
                 }
 
 
-                int progress = (int) ((100 * mLastUploadingingInfo.getCurrentbytes()) / mLastUploadingingInfo.getContentLength());
+                int progress = mLastUploadingingInfo.getPercent();
                 mUploadProgress.setProgress(progress);
                 mUploadProgressText.setText(progress + "%");
                 Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %");
@@ -144,10 +144,14 @@ public class MainFragment extends Fragment {
                     mLastDownloadingInfo = progressInfo;
                 }
 
-                int progress = (int) ((100 * mLastDownloadingInfo.getCurrentbytes()) / mLastDownloadingInfo.getContentLength());
+                int progress = mLastDownloadingInfo.getPercent();
                 mDownloadProgress.setProgress(progress);
                 mDownloadProgressText.setText(progress + "%");
                 Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " %");
+                if (mLastDownloadingInfo.isFinish()) {
+                    //说明已经下载完成
+                    Log.d(TAG, "Download -- finish");
+                }
             }
 
             @Override
@@ -168,7 +172,7 @@ public class MainFragment extends Fragment {
         return new ProgressListener() {
             @Override
             public void onProgress(ProgressInfo progressInfo) {
-                int progress = (int) ((100 * progressInfo.getCurrentbytes()) / progressInfo.getContentLength());
+                int progress = progressInfo.getPercent();
                 mGlideProgress.setProgress(progress);
                 mGlideProgressText.setText(progress + "%");
                 Log.d(TAG, progressInfo.getId() + "--glide--"+progress + " %");

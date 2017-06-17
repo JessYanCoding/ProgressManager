@@ -1,11 +1,11 @@
 package me.jessyan.progressmanager.body;
 
 import android.os.Handler;
+import android.os.SystemClock;
 
 import java.io.IOException;
 import java.util.List;
 
-import me.jessyan.progressmanager.ProgressInfo;
 import me.jessyan.progressmanager.ProgressListener;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -30,6 +30,7 @@ public class ProgressRequestBody extends RequestBody {
     protected final ProgressListener[] mListeners;
     protected final ProgressInfo mProgressInfo;
     private BufferedSink mBufferedSink;
+
 
     public ProgressRequestBody(Handler handler, RequestBody delegate, List<ProgressListener> listeners) {
         this.mDelegate = delegate;
@@ -73,6 +74,7 @@ public class ProgressRequestBody extends RequestBody {
     protected final class CountingSink extends ForwardingSink {
         private long totalBytesRead = 0L;
         private long lastRefreshTime = 0L;  //最后一次刷新的时间
+        private long tempSize = 0L;
 
         public CountingSink(Sink delegate) {
             super(delegate);
@@ -93,20 +95,30 @@ public class ProgressRequestBody extends RequestBody {
                 mProgressInfo.setContentLength(contentLength());
             }
             totalBytesRead += byteCount;
+            tempSize += byteCount;
             if (mListeners != null) {
-                long curTime = System.currentTimeMillis();
+                long curTime = SystemClock.elapsedRealtime();
                 if (curTime - lastRefreshTime >= REFRESH_TIME || totalBytesRead == mProgressInfo.getContentLength()) {
-                    mProgressInfo.setCurrentbytes(totalBytesRead);
+                    final long finalTempSize = tempSize;
+                    final long finalTotalBytesRead = totalBytesRead;
+                    final long finalIntervalTime = curTime - lastRefreshTime;
                     for (int i = 0; i < mListeners.length; i++) {
-                        final int finalI = i;
+                        final ProgressListener listener = mListeners[i];
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                mListeners[finalI].onProgress(mProgressInfo);
+                                // Runnable 里的代码是通过 Handler 执行在主线程的,外面代码可能执行在其他线程
+                                // 所以我必须使用 final ,保证在 Runnable 执行前使用到的变量,在执行时不会被修改
+                                mProgressInfo.setEachBytes(finalTempSize);
+                                mProgressInfo.setCurrentbytes(finalTotalBytesRead);
+                                mProgressInfo.setIntervalTime(finalIntervalTime);
+                                mProgressInfo.setFinish(finalTotalBytesRead == mProgressInfo.getContentLength());
+                                listener.onProgress(mProgressInfo);
                             }
                         });
                     }
-                    lastRefreshTime = System.currentTimeMillis();
+                    lastRefreshTime = curTime;
+                    tempSize = 0;
                 }
             }
         }

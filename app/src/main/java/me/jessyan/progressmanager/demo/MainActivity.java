@@ -19,7 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import me.jessyan.progressmanager.ProgressInfo;
+import me.jessyan.progressmanager.body.ProgressInfo;
 import me.jessyan.progressmanager.ProgressListener;
 import me.jessyan.progressmanager.ProgressManager;
 import okhttp3.MediaType;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     // github 服务器可能下载不稳定
     public static final String IMAGE_URL = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png";
-    public static final String DOWNLOAD_URL = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/MVPArms.gif";
+    public static final String DOWNLOAD_URL = "http://inthecheesefactory.com/uploads/source/nestedfragment/fragments.png";
     public static final String UPLOAD_URL = "http://upload.qiniu.com/";
 
     private ImageView mImageView;
@@ -94,10 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return new ProgressListener() {
             @Override
             public void onProgress(ProgressInfo progressInfo) {
-                int progress = (int) ((100 * progressInfo.getCurrentbytes()) / progressInfo.getContentLength());
+                int progress = progressInfo.getPercent();
                 mGlideProgress.setProgress(progress);
                 mGlideProgressText.setText(progress + "%");
-                Log.d(TAG, progressInfo.getId() + "--glide--" + progress + " %");
+                Log.d(TAG, progressInfo.getId() + "--glide--" + progress + " % " + progressInfo.getEachBytes() + "  " + progressInfo.getCurrentbytes() + "  " + progressInfo.getContentLength());
+                Log.d(TAG, progressInfo.getSpeed()+" byte/s");
+                if (progressInfo.isFinish()) {
+                    //说明已经加载完成
+                    Log.d(TAG, "Glide -- finish");
+                }
             }
 
             @Override
@@ -134,10 +139,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
 
-                int progress = (int) ((100 * mLastUploadingingInfo.getCurrentbytes()) / mLastUploadingingInfo.getContentLength());
+                int progress = mLastUploadingingInfo.getPercent();
                 mUploadProgress.setProgress(progress);
                 mUploadProgressText.setText(progress + "%");
-                Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %  " + mLastUploadingingInfo.getCurrentbytes() + "  " + mLastUploadingingInfo.getContentLength());
+                Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %  " + mLastUploadingingInfo.getEachBytes() + "  " + mLastUploadingingInfo.getCurrentbytes() + "  " + mLastUploadingingInfo.getContentLength());
+                Log.d(TAG, mLastUploadingingInfo.getSpeed()+" byte/s");
+                if (mLastUploadingingInfo.isFinish()){
+                    //说明已经上传完成
+                    Log.d(TAG, "Upload -- finish");
+                }
             }
 
             @Override
@@ -172,11 +182,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else if (progressInfo.getId() > mLastDownloadingInfo.getId()) {
                     mLastDownloadingInfo = progressInfo;
                 }
-                // 如果getCurrentbytes 等于 -1 说明二进制已经读取完,可能是成功下载完所有数据,也可能是遭遇了错误
-                int progress = (int) ((100 * mLastDownloadingInfo.getCurrentbytes()) / mLastDownloadingInfo.getContentLength());
+
+                int progress = mLastDownloadingInfo.getPercent();
                 mDownloadProgress.setProgress(progress);
                 mDownloadProgressText.setText(progress + "%");
-                Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " % " + mLastDownloadingInfo.getCurrentbytes() + "  " + mLastDownloadingInfo.getContentLength());
+                Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " % " + mLastDownloadingInfo.getEachBytes() + "  " + mLastDownloadingInfo.getCurrentbytes() + "  " + mLastDownloadingInfo.getContentLength());
+                Log.d(TAG, mLastDownloadingInfo.getSpeed()+" byte/s");
+                if (mLastDownloadingInfo.isFinish()) {
+                    //说明已经下载完成
+                    Log.d(TAG, "Download -- finish");
+                }
             }
 
             @Override
