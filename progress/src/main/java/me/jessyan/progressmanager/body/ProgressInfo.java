@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
+ * {@link ProgressInfo} 用于存储与进度有关的变量,已实现 Parcelable
  * Created by jess on 07/06/2017 12:09
  * Contact with jess.yan.effort@gmail.com
  */
