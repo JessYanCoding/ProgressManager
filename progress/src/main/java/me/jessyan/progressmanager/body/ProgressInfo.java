@@ -88,6 +88,17 @@ public class ProgressInfo implements Parcelable{
         return getEachBytes() * 1000 / getIntervalTime();
     }
 
+    @Override
+    public String toString() {
+        return "ProgressInfo{" +
+                "currentBytes=" + currentBytes +
+                ", contentLength=" + contentLength +
+                ", intervalTime=" + intervalTime +
+                ", eachBytes=" + eachBytes +
+                ", id=" + id +
+                ", finish=" + finish +
+                '}';
+    }
 
     @Override
     public int describeContents() {
