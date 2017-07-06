@@ -15,8 +15,6 @@ import okio.ForwardingSink;
 import okio.Okio;
 import okio.Sink;
 
-import static me.jessyan.progressmanager.ProgressManager.REFRESH_TIME;
-
 /**
  * 继承于{@link RequestBody},通过此类获取 Okhttp 上传的二进制数据
  * Created by jess on 02/06/2017 18:05
@@ -26,16 +24,18 @@ import static me.jessyan.progressmanager.ProgressManager.REFRESH_TIME;
 public class ProgressRequestBody extends RequestBody {
 
     protected Handler mHandler;
+    protected int mRefreshTime;
     protected final RequestBody mDelegate;
     protected final ProgressListener[] mListeners;
     protected final ProgressInfo mProgressInfo;
     private BufferedSink mBufferedSink;
 
 
-    public ProgressRequestBody(Handler handler, RequestBody delegate, List<ProgressListener> listeners) {
+    public ProgressRequestBody(Handler handler, RequestBody delegate, List<ProgressListener> listeners, int refreshTime) {
         this.mDelegate = delegate;
         this.mListeners = listeners.toArray(new ProgressListener[listeners.size()]);
         this.mHandler = handler;
+        this.mRefreshTime = refreshTime;
         this.mProgressInfo = new ProgressInfo(System.currentTimeMillis());
     }
 
@@ -98,7 +98,7 @@ public class ProgressRequestBody extends RequestBody {
             tempSize += byteCount;
             if (mListeners != null) {
                 long curTime = SystemClock.elapsedRealtime();
-                if (curTime - lastRefreshTime >= REFRESH_TIME || totalBytesRead == mProgressInfo.getContentLength()) {
+                if (curTime - lastRefreshTime >= mRefreshTime || totalBytesRead == mProgressInfo.getContentLength()) {
                     final long finalTempSize = tempSize;
                     final long finalTotalBytesRead = totalBytesRead;
                     final long finalIntervalTime = curTime - lastRefreshTime;

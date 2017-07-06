@@ -15,8 +15,6 @@ import okio.ForwardingSource;
 import okio.Okio;
 import okio.Source;
 
-import static me.jessyan.progressmanager.ProgressManager.REFRESH_TIME;
-
 /**
  * 继承于{@link ResponseBody},通过此类获取 Okhttp 下载的二进制数据
  * Created by jess on 02/06/2017 18:25
@@ -26,15 +24,17 @@ import static me.jessyan.progressmanager.ProgressManager.REFRESH_TIME;
 public class ProgressResponseBody extends ResponseBody {
 
     protected Handler mHandler;
+    protected int mRefreshTime;
     protected final ResponseBody mDelegate;
     protected final ProgressListener[] mListeners;
     protected final ProgressInfo mProgressInfo;
     private BufferedSource mBufferedSource;
 
-    public ProgressResponseBody(Handler handler, ResponseBody responseBody, List<ProgressListener> listeners) {
+    public ProgressResponseBody(Handler handler, ResponseBody responseBody, List<ProgressListener> listeners, int refreshTime) {
         this.mDelegate = responseBody;
         this.mListeners = listeners.toArray(new ProgressListener[listeners.size()]);
         this.mHandler = handler;
+        this.mRefreshTime = refreshTime;
         this.mProgressInfo = new ProgressInfo(System.currentTimeMillis());
     }
 
@@ -82,7 +82,7 @@ public class ProgressResponseBody extends ResponseBody {
                 tempSize += bytesRead != -1 ? bytesRead : 0;
                 if (mListeners != null) {
                     long curTime = SystemClock.elapsedRealtime();
-                    if (curTime - lastRefreshTime >= REFRESH_TIME || bytesRead == -1 || totalBytesRead == mProgressInfo.getContentLength()) {
+                    if (curTime - lastRefreshTime >= mRefreshTime || bytesRead == -1 || totalBytesRead == mProgressInfo.getContentLength()) {
                         final long finalBytesRead = bytesRead;
                         final long finalTempSize = tempSize;
                         final long finalTotalBytesRead = totalBytesRead;
