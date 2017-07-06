@@ -33,12 +33,12 @@ public final class ProgressManager {
     private final Map<String, List<ProgressListener>> mResponseListeners = new WeakHashMap<>();
     private final Handler mHandler; //所有监听器在 Handler 中被执行,所以可以保证所有监听器在主线程中被执行
     private final Interceptor mInterceptor;
-    private int mRefreshTime = DEFAULT_REFRESH_TIME;
+    private int mRefreshTime = DEFAULT_REFRESH_TIME; //进度刷新时间(单位ms),避免高频率调用
 
     private static volatile ProgressManager mProgressManager;
 
     public static final boolean DEPENDENCY_OKHTTP;
-    public static final int DEFAULT_REFRESH_TIME = 150; //回调刷新时间(单位ms),避免高频率调用
+    public static final int DEFAULT_REFRESH_TIME = 150;
 
 
     static {
