@@ -97,11 +97,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int progress = progressInfo.getPercent();
                 mGlideProgress.setProgress(progress);
                 mGlideProgressText.setText(progress + "%");
-                Log.d(TAG, progressInfo.getId() + "--glide--" + progress + " % " + progressInfo.getEachBytes() + "  " + progressInfo.getCurrentbytes() + "  " + progressInfo.getContentLength());
-                Log.d(TAG, progressInfo.getSpeed()+" byte/s");
+                Log.d(TAG, "--Glide-- " + progress + " %  " + progressInfo.getSpeed() + " byte/s  " + progressInfo.toString());
                 if (progressInfo.isFinish()) {
                     //说明已经加载完成
-                    Log.d(TAG, "Glide -- finish");
+                    Log.d(TAG, "--Glide-- finish");
                 }
             }
 
@@ -138,15 +137,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mLastUploadingingInfo = progressInfo;
                 }
 
-
                 int progress = mLastUploadingingInfo.getPercent();
                 mUploadProgress.setProgress(progress);
                 mUploadProgressText.setText(progress + "%");
-                Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %  " + mLastUploadingingInfo.getEachBytes() + "  " + mLastUploadingingInfo.getCurrentbytes() + "  " + mLastUploadingingInfo.getContentLength());
-                Log.d(TAG, mLastUploadingingInfo.getSpeed()+" byte/s");
-                if (mLastUploadingingInfo.isFinish()){
+                Log.d(TAG, "--Upload-- " + progress + " %  " + mLastUploadingingInfo.getSpeed() + " byte/s  " + mLastUploadingingInfo.toString());
+                if (mLastUploadingingInfo.isFinish()) {
                     //说明已经上传完成
-                    Log.d(TAG, "Upload -- finish");
+                    Log.d(TAG, "--Upload-- finish");
                 }
             }
 
@@ -186,11 +183,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int progress = mLastDownloadingInfo.getPercent();
                 mDownloadProgress.setProgress(progress);
                 mDownloadProgressText.setText(progress + "%");
-                Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " % " + mLastDownloadingInfo.getEachBytes() + "  " + mLastDownloadingInfo.getCurrentbytes() + "  " + mLastDownloadingInfo.getContentLength());
-                Log.d(TAG, mLastDownloadingInfo.getSpeed()+" byte/s");
+                Log.d(TAG, "--Download-- " + progress + " %  " + mLastDownloadingInfo.getSpeed() + " byte/s  " + mLastDownloadingInfo.toString());
                 if (mLastDownloadingInfo.isFinish()) {
                     //说明已经下载完成
-                    Log.d(TAG, "Download -- finish");
+                    Log.d(TAG, "--Download-- finish");
                 }
             }
 

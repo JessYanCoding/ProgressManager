@@ -78,12 +78,6 @@ public class MainFragment extends Fragment {
     }
 
 
-
-
-
-
-
-
     @NonNull
     private ProgressListener getUploadListener() {
         return new ProgressListener() {
@@ -108,7 +102,7 @@ public class MainFragment extends Fragment {
                 int progress = mLastUploadingingInfo.getPercent();
                 mUploadProgress.setProgress(progress);
                 mUploadProgressText.setText(progress + "%");
-                Log.d(TAG, mLastUploadingingInfo.getId() + "--upload--" + progress + " %");
+                Log.d(TAG, "--Upload-- " + progress + " %");
             }
 
             @Override
@@ -147,11 +141,7 @@ public class MainFragment extends Fragment {
                 int progress = mLastDownloadingInfo.getPercent();
                 mDownloadProgress.setProgress(progress);
                 mDownloadProgressText.setText(progress + "%");
-                Log.d(TAG, mLastDownloadingInfo.getId() + "--download--" + progress + " %");
-                if (mLastDownloadingInfo.isFinish()) {
-                    //说明已经下载完成
-                    Log.d(TAG, "Download -- finish");
-                }
+                Log.d(TAG, "--Download-- " + progress + " %");
             }
 
             @Override
@@ -175,7 +165,7 @@ public class MainFragment extends Fragment {
                 int progress = progressInfo.getPercent();
                 mGlideProgress.setProgress(progress);
                 mGlideProgressText.setText(progress + "%");
-                Log.d(TAG, progressInfo.getId() + "--glide--"+progress + " %");
+                Log.d(TAG, "--Glide-- " + progress + " %");
             }
 
             @Override
