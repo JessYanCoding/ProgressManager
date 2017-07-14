@@ -2,6 +2,7 @@ package me.jessyan.progressmanager;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -22,7 +23,6 @@ import okhttp3.Response;
  * 基于 Okhttp Interceptor,所以使用前请确保你使用 Okhttp 或 Retrofit 进行网络请求
  * 实现原理类似 EventBus,你可在 App 中的任何地方,将多个监听器,以 Url 地址作为标识符,注册到本管理器
  * 当此 Url 地址存在下载或者上传的动作时,管理器会主动调用所有使用此 Url 地址注册过的监听器,达到多个模块的同步更新
- * 因为是通过 Url 作为唯一标识符,所以如果出现请求被重定向其他页面进行上传或者下载,那么就会出现获取不到进度的情况
  * Created by jess on 02/06/2017 18:37
  * Contact with jess.yan.effort@gmail.com
  */
@@ -182,6 +182,12 @@ public final class ProgressManager {
         if (response == null || response.body() == null)
             return response;
 
+        if (haveRedirect(response)) {
+            resolveRedirect(mRequestListeners, response);
+            resolveRedirect(mResponseListeners, response);
+            return response;
+        }
+
         String key = response.request().url().toString();
         if (mResponseListeners.containsKey(key)) {
             List<ProgressListener> listeners = mResponseListeners.get(key);
@@ -190,6 +196,37 @@ public final class ProgressManager {
                     .build();
         }
         return response;
+    }
+
+    /**
+     * 是否需要重定向
+     *
+     * @param response
+     * @return
+     */
+    private boolean haveRedirect(Response response) {
+        String status = response.header("Status");
+        if (status.contains("301") || status.contains("302") || status.contains("303") || status.contains("307")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 使重定向后,也可以监听进度
+     *
+     * @param map
+     * @param response
+     */
+    private void resolveRedirect(Map<String, List<ProgressListener>> map, Response response) {
+        String url = response.request().url().toString();
+        List<ProgressListener> progressListeners = map.get(url); //查看此重定向 url ,是否已经注册过监听器
+        if (progressListeners != null) {
+            String location = response.header("Location");// 重定向地址
+            if (!TextUtils.isEmpty(location) && !map.containsKey(location)) {
+                map.put(location, progressListeners); //将需要重定向地址的监听器,提供给重定向地址,保证重定向后也可以监听进度
+            }
+        }
     }
 
 
