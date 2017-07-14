@@ -206,6 +206,8 @@ public final class ProgressManager {
      */
     private boolean haveRedirect(Response response) {
         String status = response.header("Status");
+        if (TextUtils.isEmpty(status))
+            return false;
         if (status.contains("301") || status.contains("302") || status.contains("303") || status.contains("307")) {
             return true;
         }
