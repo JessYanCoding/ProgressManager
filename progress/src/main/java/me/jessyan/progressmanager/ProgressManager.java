@@ -64,7 +64,7 @@ public final class ProgressManager {
     }
 
 
-    public static ProgressManager getInstance() {
+    public static final ProgressManager getInstance() {
         if (mProgressManager == null) {
             if (!DEPENDENCY_OKHTTP) { //使用本管理器必须依赖 Okhttp
                 throw new IllegalStateException("Must be dependency Okhttp");
