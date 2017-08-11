@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -19,9 +19,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import me.jessyan.progressmanager.body.ProgressInfo;
 import me.jessyan.progressmanager.ProgressListener;
 import me.jessyan.progressmanager.ProgressManager;
+import me.jessyan.progressmanager.body.ProgressInfo;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,7 +31,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
     // github 服务器可能下载不稳定
-    public static final String IMAGE_URL = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png";
+    public static final String IMAGE_URL = "http://inthecheesefactory.com/uploads/source/nestedfragment/fragments.png";
     public static final String DOWNLOAD_URL = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/MVPArms.gif";
     public static final String UPLOAD_URL = "http://upload.qiniu.com/";
 
@@ -292,11 +292,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 即重复加载同一个 Url 时,停止还在请求当中的进度,再开启新的加载
      */
     private void glideStart() {
-        Glide.with(this)
+        GlideApp.with(this)
                 .load(IMAGE_URL)
-                .centerCrop()
-                .placeholder(R.color.colorPrimary)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .apply(new RequestOptions()
+                        .centerCrop()
+                        .placeholder(R.color.colorPrimary)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE))
                 .into(mImageView);
     }
 

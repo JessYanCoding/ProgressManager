@@ -21,10 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="me.jessyan.progressmanager.demo.GlideConfiguration"
-            android:value="GlideModule"/>
     </application>
 
 </manifest>
