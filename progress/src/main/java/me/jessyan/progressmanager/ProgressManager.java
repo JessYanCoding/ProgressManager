@@ -94,7 +94,7 @@ public final class ProgressManager {
      * @param url
      * @param listener 当此 Url 地址存在上传的动作时,此监听器将被调用
      */
-    public void addRequestLisenter(String url, ProgressListener listener) {
+    public void addRequestListener(String url, ProgressListener listener) {
         List<ProgressListener> progressListeners;
         synchronized (ProgressManager.class) {
             progressListeners = mRequestListeners.get(url);

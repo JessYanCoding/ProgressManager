@@ -52,7 +52,7 @@
 
 
  // Okhttp/Retofit upload
- ProgressManager.getInstance().addRequestLisenter(UPLOAD_URL, getUploadListener());
+ ProgressManager.getInstance().addRequestListener(UPLOAD_URL, getUploadListener());
 ```
 
 

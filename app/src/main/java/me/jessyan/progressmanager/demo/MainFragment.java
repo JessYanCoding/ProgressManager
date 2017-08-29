@@ -74,7 +74,7 @@ public class MainFragment extends Fragment {
         ProgressManager.getInstance().addResponseListener(DOWNLOAD_URL, getDownloadListener());
 
         //Okhttp/Retofit 上传监听
-        ProgressManager.getInstance().addRequestLisenter(UPLOAD_URL, getUploadListener());
+        ProgressManager.getInstance().addRequestListener(UPLOAD_URL, getUploadListener());
     }
 
 
