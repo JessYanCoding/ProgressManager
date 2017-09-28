@@ -1,3 +1,18 @@
+/**
+ * Copyright 2017 JessYan
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package me.jessyan.progressmanager.body;
 
 import android.os.Handler;
@@ -16,11 +31,14 @@ import okio.Okio;
 import okio.Sink;
 
 /**
- * 继承于{@link RequestBody},通过此类获取 Okhttp 上传的二进制数据
- * Created by jess on 02/06/2017 18:05
- * Contact with jess.yan.effort@gmail.com
+ * ================================================
+ * 继承于 {@link RequestBody}, 通过此类获取 Okhttp 上传的二进制数据
+ * <p>
+ * Created by JessYan on 02/06/2017 18:05
+ * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
+ * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * ================================================
  */
-
 public class ProgressRequestBody extends RequestBody {
 
     protected Handler mHandler;

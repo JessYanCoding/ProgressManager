@@ -1,10 +1,28 @@
+/**
+ * Copyright 2017 JessYan
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package me.jessyan.progressmanager;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
 import java.io.IOException;
+import java.lang.ref.ReferenceQueue;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,16 +37,26 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
+ *  ================================================
  * ProgressManager 一行代码即可监听 App 中所有网络链接的上传以及下载进度,包括 Glide(需要将下载引擎切换为 Okhttp)的图片加载进度,
- * 基于 Okhttp Interceptor,所以使用前请确保你使用 Okhttp 或 Retrofit 进行网络请求
- * 实现原理类似 EventBus,你可在 App 中的任何地方,将多个监听器,以 Url 地址作为标识符,注册到本管理器
- * 当此 Url 地址存在下载或者上传的动作时,管理器会主动调用所有使用此 Url 地址注册过的监听器,达到多个模块的同步更新
- * Created by jess on 02/06/2017 18:37
- * Contact with jess.yan.effort@gmail.com
+ * 基于 Okhttp 的 {@link Interceptor},所以使用前请确保你使用 Okhttp 或 Retrofit 进行网络请求
+ * 实现原理类似 EventBus,你可在 App 中的任何地方,将多个监听器,以 {@code url} 地址作为标识符,注册到本管理器
+ * 当此 {@code url} 地址存在下载或者上传的动作时,管理器会主动调用所有使用此 {@code url} 地址注册过的监听器,达到多个模块的同步更新
+ *
+ * Created by JessYan on 02/06/2017 18:37
+ * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
+ * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * ================================================
  */
-
 public final class ProgressManager {
-    //WeakHashMap会在java虚拟机回收内存时,找到没被使用的key,将此条目移除,所以不需要手动remove()
+    /**
+     * 因为 {@link WeakHashMap} 将 {@code key} 作为弱键 (弱引用的键), 所以当 java 虚拟机 GC 时会将某个不在被引用的 {@code key} 回收并加入 {@link ReferenceQueue}
+     * 在下一次操作 {@link WeakHashMap} 时,会比对 {@link ReferenceQueue} 中的 {@code key}
+     * 将 {@link WeakHashMap} 中对应的 {@code key} 连同 {@code value} 一起移除,从而免去了手动 {@link Map#remove(Object)}
+     *
+     * 建议你们在日常使用中,将这个 {@code key} 和对应的 {@link Activity}/{@link Fragment} 生命周期同步,也就使用全局变量持有
+     * 最重要的是使用 String mUrl = new String("url");, 而不是 String mUrl = "url";
+     */
     private final Map<String, List<ProgressListener>> mRequestListeners = new WeakHashMap<>();
     private final Map<String, List<ProgressListener>> mResponseListeners = new WeakHashMap<>();
     private final Handler mHandler; //所有监听器在 Handler 中被执行,所以可以保证所有监听器在主线程中被执行
@@ -37,6 +65,7 @@ public final class ProgressManager {
 
     private static volatile ProgressManager mProgressManager;
 
+    public static final String OKHTTP_PACKAGE_NAME = "okhttp3.OkHttpClient";
     public static final boolean DEPENDENCY_OKHTTP;
     public static final int DEFAULT_REFRESH_TIME = 150;
 
@@ -44,7 +73,7 @@ public final class ProgressManager {
     static {
         boolean hasDependency;
         try {
-            Class.forName("okhttp3.OkHttpClient");
+            Class.forName(OKHTTP_PACKAGE_NAME);
             hasDependency = true;
         } catch (ClassNotFoundException e) {
             hasDependency = false;
@@ -80,19 +109,19 @@ public final class ProgressManager {
 
 
     /**
-     * 设置 {@link ProgressListener#onProgress(ProgressInfo)} 每次被调用的间隔时间,单位毫秒
+     * 设置 {@link ProgressListener#onProgress(ProgressInfo)} 每次被调用的间隔时间
      *
-     * @param refreshTime
+     * @param refreshTime 间隔时间,单位毫秒
      */
     public void setRefreshTime(int refreshTime) {
         this.mRefreshTime = refreshTime;
     }
 
     /**
-     * 将需要被监听上传进度的 Url 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
+     * 将需要被监听上传进度的 {@code url} 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
      *
-     * @param url
-     * @param listener 当此 Url 地址存在上传的动作时,此监听器将被调用
+     * @param url {@code url} 作为标识符
+     * @param listener 当此 {@code url} 地址存在上传的动作时,此监听器将被调用
      */
     public void addRequestListener(String url, ProgressListener listener) {
         List<ProgressListener> progressListeners;
@@ -107,10 +136,10 @@ public final class ProgressManager {
     }
 
     /**
-     * 将需要被监听下载进度的 Url 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
+     * 将需要被监听下载进度的 {@code url} 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
      *
-     * @param url
-     * @param listener 当此 Url 地址存在下载的动作时,此监听器将被调用
+     * @param url {@code url 作为标识符
+     * @param listener 当此 {@code url} 地址存在下载的动作时,此监听器将被调用
      */
     public void addResponseListener(String url, ProgressListener listener) {
         List<ProgressListener> progressListeners;
@@ -131,8 +160,8 @@ public final class ProgressManager {
      * 但同样会引起网络请求的失败,所以向外面提供{@link ProgressManager#notifyOnErorr},当外部发生错误时
      * 手动调用此方法,以通知所有的监听器
      *
-     * @param url
-     * @param e
+     * @param url {@code url 作为标识符
+     * @param e 错误
      */
     public void notifyOnErorr(String url, Exception e) {
         forEachListenersOnError(mRequestListeners, url, e);
@@ -154,7 +183,7 @@ public final class ProgressManager {
      * 将 {@link Request} 传入,配置一些本框架需要的参数,常用于自定义 {@link Interceptor}
      * 如已使用 {@link ProgressManager#with(OkHttpClient.Builder)},就不会用到此方法
      *
-     * @param request
+     * @param request 原始的 {@link Request}
      * @return
      */
     public Request wrapRequestBody(Request request) {
@@ -175,7 +204,7 @@ public final class ProgressManager {
      * 将 {@link Response} 传入,配置一些本框架需要的参数,常用于自定义 {@link Interceptor}
      * 如已使用 {@link ProgressManager#with(OkHttpClient.Builder)},就不会用到此方法
      *
-     * @param response
+     * @param response 原始的 {@link Response}
      * @return
      */
     public Response wrapResponseBody(Response response) {
@@ -201,7 +230,7 @@ public final class ProgressManager {
     /**
      * 是否需要重定向
      *
-     * @param response
+     * @param response 原始的 {@link Response}
      * @return
      */
     private boolean haveRedirect(Response response) {
@@ -215,10 +244,10 @@ public final class ProgressManager {
     }
 
     /**
-     * 使重定向后,也可以监听进度
+     * 解决请求地址重定向后的兼容问题
      *
-     * @param map
-     * @param response
+     * @param map {@link #mRequestListeners} 或者 {@link #mResponseListeners}
+     * @param response 原始的 {@link Response}
      */
     private void resolveRedirect(Map<String, List<ProgressListener>> map, Response response) {
         String url = response.request().url().toString();

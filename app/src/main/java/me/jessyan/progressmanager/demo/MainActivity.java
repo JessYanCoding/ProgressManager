@@ -1,3 +1,18 @@
+/**
+ * Copyright 2017 JessYan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package me.jessyan.progressmanager.demo;
 
 import android.os.Bundle;
@@ -26,13 +41,20 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
+/**
+ * ================================================
+ * Created by JessYan on 08/06/2017 12:59
+ * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
+ * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * ================================================
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
-    // github 服务器可能下载不稳定
-    public static final String IMAGE_URL = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png";
-    public static final String DOWNLOAD_URL = "https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/MVPArms.gif";
-    public static final String UPLOAD_URL = "http://upload.qiniu.com/";
+    //github 服务器可能下载不稳定
+    //我这里为了方便直接使用了全局静态常量,这样 WeakHashMap 中的 key 永远不会回收,建议日常使用时使用全局变量
+    public static final String IMAGE_URL = new String("https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png");
+    public static final String DOWNLOAD_URL = new String("https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/MVPArms.gif");
+    public static final String UPLOAD_URL = new String("http://upload.qiniu.com/");
 
     private ImageView mImageView;
     private OkHttpClient mOkHttpClient;
