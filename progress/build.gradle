@@ -27,7 +27,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    provided 'com.squareup.okhttp3:okhttp:3.8.1'
+    provided 'com.squareup.okhttp3:okhttp:3.9.0'
 }
 
 apply from: 'bintray.gradle'
