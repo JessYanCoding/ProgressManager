@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.WeakHashMap;
 
 import me.jessyan.progressmanager.ProgressListener;
 import me.jessyan.progressmanager.ProgressManager;
@@ -50,8 +51,12 @@ import okhttp3.Response;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
-    //github 服务器可能下载不稳定
-    //我这里为了方便展示直接使用了全局静态常量,这样 WeakHashMap 中的 key 永远不会回收,建议日常使用时使用全局变量
+    /**
+     * 我这里为了方便展示,直接使用了全局静态常量,这样 {@link WeakHashMap} 中的 {@code key} 和 {@code value} 永远不会回收,建议日常使用时使用全局变量
+     * 最重要的是使用 String mUrl = new String("url");, 而不是 String mUrl = "url";
+     * 为什么这样做? 因为如果直接使用 String mUrl = "url", 这个 url 字符串会被加入全局字符串常量池, 池中的字符串将不会被回收
+     * 既然 {@code key} 没被回收, 那 {@link WeakHashMap} 中的值也不会被移除
+     */
     public static final String IMAGE_URL = new String("https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png");
     public static final String DOWNLOAD_URL = new String("https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/MVPArms.gif");
     public static final String UPLOAD_URL = new String("http://upload.qiniu.com/");
