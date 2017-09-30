@@ -56,6 +56,8 @@ public final class ProgressManager {
      *
      * 建议你们在日常使用中,将这个 {@code key} 和对应的 {@link Activity}/{@link Fragment} 生命周期同步,也就使用全局变量持有
      * 最重要的是使用 String mUrl = new String("url");, 而不是 String mUrl = "url";
+     * 为什么这样做? 因为如果直接使用 String mUrl = "url", 这个 url 字符串会被加入全局字符串常量池, 池中的字符串将不会被回收
+     * 既然 {@code key} 没被回收, 那 {@link WeakHashMap} 中的值也不会被移除
      */
     private final Map<String, List<ProgressListener>> mRequestListeners = new WeakHashMap<>();
     private final Map<String, List<ProgressListener>> mResponseListeners = new WeakHashMap<>();
