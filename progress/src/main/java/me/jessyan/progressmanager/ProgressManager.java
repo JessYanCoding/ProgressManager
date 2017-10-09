@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.text.TextUtils;
 
 import java.io.IOException;
@@ -37,12 +38,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- *  ================================================
+ * ================================================
  * ProgressManager 一行代码即可监听 App 中所有网络链接的上传以及下载进度,包括 Glide(需要将下载引擎切换为 Okhttp)的图片加载进度,
  * 基于 Okhttp 的 {@link Interceptor},所以使用前请确保你使用 Okhttp 或 Retrofit 进行网络请求
  * 实现原理类似 EventBus,你可在 App 中的任何地方,将多个监听器,以 {@code url} 地址作为标识符,注册到本管理器
  * 当此 {@code url} 地址存在下载或者上传的动作时,管理器会主动调用所有使用此 {@code url} 地址注册过的监听器,达到多个模块的同步更新
- *
+ * <p>
  * Created by JessYan on 02/06/2017 18:37
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
@@ -53,7 +54,7 @@ public final class ProgressManager {
      * 因为 {@link WeakHashMap} 将 {@code key} 作为弱键 (弱引用的键), 所以当 java 虚拟机 GC 时会将某个不在被引用的 {@code key} 回收并加入 {@link ReferenceQueue}
      * 在下一次操作 {@link WeakHashMap} 时,会比对 {@link ReferenceQueue} 中的 {@code key}
      * 将 {@link WeakHashMap} 中对应的 {@code key} 连同 {@code value} 一起移除,从而免去了手动 {@link Map#remove(Object)}
-     *
+     * <p>
      * 建议你们在日常使用中,将这个 {@code key} 和对应的 {@link Activity}/{@link Fragment} 生命周期同步,也就使用全局变量持有
      * 最重要的是使用 String mUrl = new String("url");, 而不是 String mUrl = "url";
      * 为什么这样做? 因为如果直接使用 String mUrl = "url", 这个 {@code url} 字符串会被加入全局字符串常量池, 池中的字符串将不会被回收
@@ -70,6 +71,7 @@ public final class ProgressManager {
     public static final String OKHTTP_PACKAGE_NAME = "okhttp3.OkHttpClient";
     public static final boolean DEPENDENCY_OKHTTP;
     public static final int DEFAULT_REFRESH_TIME = 150;
+    public static final String IDENTIFICATION_NUMBER = "$JessYan$";
 
 
     static {
@@ -122,7 +124,7 @@ public final class ProgressManager {
     /**
      * 将需要被监听上传进度的 {@code url} 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
      *
-     * @param url {@code url} 作为标识符
+     * @param url      {@code url} 作为标识符
      * @param listener 当此 {@code url} 地址存在上传的动作时,此监听器将被调用
      */
     public void addRequestListener(String url, ProgressListener listener) {
@@ -140,7 +142,7 @@ public final class ProgressManager {
     /**
      * 将需要被监听下载进度的 {@code url} 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
      *
-     * @param url {@code url 作为标识符
+     * @param url      {@code url} 作为标识符
      * @param listener 当此 {@code url} 地址存在下载的动作时,此监听器将被调用
      */
     public void addResponseListener(String url, ProgressListener listener) {
@@ -162,8 +164,8 @@ public final class ProgressManager {
      * 但同样会引起网络请求的失败,所以向外面提供{@link ProgressManager#notifyOnErorr},当外部发生错误时
      * 手动调用此方法,以通知所有的监听器
      *
-     * @param url {@code url 作为标识符
-     * @param e 错误
+     * @param url {@code url} 作为标识符
+     * @param e   错误
      */
     public void notifyOnErorr(String url, Exception e) {
         forEachListenersOnError(mRequestListeners, url, e);
@@ -230,6 +232,136 @@ public final class ProgressManager {
     }
 
     /**
+     * 当出现需要使用同一个 {@code url} 根据 Post 请求参数的不同而下载不同资源的情况
+     * 请使用 {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 代替 {@link #addResponseListener}
+     * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 会返回一个加入了时间戳的新的 {@code url}
+     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行下载的请求即可
+     * <p>
+     * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 与 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)}
+     * 的区别在于:
+     * {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)} 可以使用不同的 {@code key} 来自定义新的 {@code url}
+     * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 是直接使用时间戳来生成新的 {@code url}
+     * <p>
+     *
+     * @param originUrl {@code originUrl} 作为基础并结合时间戳用于生成新的 {@code url} 作为标识符
+     * @param listener  当加入了时间戳的新的 {@code url} 地址存在下载的动作时,此监听器将被调用
+     * @return 加入了时间戳的新的 {@code url}
+     */
+    public String addDiffResponseListenerOnSameUrl(String originUrl, ProgressListener listener) {
+        return addDiffResponseListenerOnSameUrl(originUrl, String.valueOf(SystemClock.elapsedRealtime()), listener);
+    }
+
+    /**
+     * 当出现需要使用同一个 {@code url} 根据 Post 请求参数的不同而下载不同资源的情况
+     * 请使用 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)} 代替 {@link #addResponseListener}
+     * 请使用 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)} 会返回一个 {@code originUrl} 结合 {@code key} 生成的新的 {@code url}
+     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行下载的请求即可
+     * <p>
+     * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 与 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)}
+     * 的区别在于:
+     * {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)} 可以使用不同的 {@code key} 来自定义新的 {@code url}
+     * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 是直接使用时间戳来生成新的 {@code url}
+     * <p>
+     * Example usage:
+     * <pre> {@code
+     * String newUrl = ProgressManager.getInstance().addDiffResponseListenerOnSameUrl(DOWNLOAD_URL, "id", getDownloadListener());
+     * new Thread(new Runnable() {
+     *  @Override
+     *  public void run() {
+     *    try {
+     *       Request request = new Request.Builder()
+     *       .url(newUrl) // 请一定使用 addDiffResponseListenerOnSameUrl 返回的 newUrl 做请求
+     *       .build();
+     *
+     *       Response response = mOkHttpClient.newCall(request).execute();
+     *      } catch (IOException e) {
+     *       e.printStackTrace();
+     *       //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
+     *       ProgressManager.getInstance().notifyOnErorr(DOWNLOAD_URL, e);
+     *     }
+     *   }
+     * }).start();
+     * } </pre>
+     *
+     * @param originUrl {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
+     * @param key       {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
+     * @param listener  当 {@code originUrl} 结合 {@code key} 生成的新的 {@code url} 地址存在下载的动作时,此监听器将被调用
+     * @return {@code originUrl} 结合 {@code key} 生成的新的 {@code url}
+     */
+    public String addDiffResponseListenerOnSameUrl(String originUrl, String key, ProgressListener listener) {
+        String newUrl = originUrl + IDENTIFICATION_NUMBER + key;
+        addResponseListener(newUrl, listener);
+        return newUrl;
+    }
+
+    /**
+     * 当出现需要使用同一个 {@code url} 根据 Post 请求参数的不同而上传不同资源的情况
+     * 请使用 {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 代替 {@link #addRequestListener}
+     * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 会返回一个加入了时间戳的新的 {@code url}
+     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行上传的请求即可
+     * <p>
+     * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 与 {@link #addDiffRequestListenerOnSameUrl(String, String, ProgressListener)}
+     * 的区别在于:
+     * {@link #addDiffRequestListenerOnSameUrl(String, String, ProgressListener)} 可以使用不同的 {@code key} 来自定义新的 {@code url}
+     * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 是直接使用时间戳来生成新的 {@code url}
+     * <p>
+     *
+     * @param originUrl {@code originUrl} 作为基础并结合时间戳用于生成新的 {@code url} 作为标识符
+     * @param listener  当加入了时间戳的新的 {@code url} 地址存在上传的动作时,此监听器将被调用
+     * @return 加入了时间戳的新的 {@code url}
+     */
+    public String addDiffRequestListenerOnSameUrl(String originUrl, ProgressListener listener) {
+        return addDiffRequestListenerOnSameUrl(originUrl, String.valueOf(SystemClock.elapsedRealtime()), listener);
+    }
+
+
+    /**
+     * 当出现需要使用同一个 {@code url} 根据 Post 请求参数的不同而上传不同资源的情况
+     * 请使用 {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 代替 {@link #addRequestListener}
+     * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 会返回一个 {@code originUrl} 结合 {@code key} 生成的新的 {@code url}
+     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行上传的请求即可
+     * <p>
+     * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 与 {@link #addDiffRequestListenerOnSameUrl(String, String, ProgressListener)}
+     * 的区别在于:
+     * {@link #addDiffRequestListenerOnSameUrl(String, String, ProgressListener)} 可以使用不同的 {@code key} 来自定义新的 {@code url}
+     * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 是直接使用时间戳来生成新的 {@code url}
+     * <p>
+     * Example usage:
+     * <pre> {@code
+     * String newUrl = ProgressManager.getInstance().addDiffRequestListenerOnSameUrl(UPLOAD_URL, "id", getUploadListener());
+     * new Thread(new Runnable() {
+     *  @Override
+     *  public void run() {
+     *    try {
+     *      File file = new File(getCacheDir(), "cache");
+     *
+     *      Request request = new Request.Builder()
+     *      .url(newUrl) // 请一定使用 addDiffRequestListenerOnSameUrl 返回的 newUrl 做请求
+     *      .post(RequestBody.create(MediaType.parse("multipart/form-data"), file))
+     *      .build();
+     *
+     *      Response response = mOkHttpClient.newCall(request).execute();
+     *     } catch (IOException e) {
+     *      e.printStackTrace();
+     *      //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
+     *      ProgressManager.getInstance().notifyOnErorr(DOWNLOAD_URL, e);
+     *    }
+     *  }
+     * }).start();
+     * } </pre>
+     *
+     * @param originUrl {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
+     * @param key       {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
+     * @param listener  当 {@code originUrl} 结合 {@code key} 生成的新的 {@code url} 地址存在上传的动作时,此监听器将被调用
+     * @return {@code originUrl} 结合 {@code key} 生成的新的 {@code url}
+     */
+    public String addDiffRequestListenerOnSameUrl(String originUrl, String key, ProgressListener listener) {
+        String newUrl = originUrl + IDENTIFICATION_NUMBER + key;
+        addRequestListener(newUrl, listener);
+        return newUrl;
+    }
+
+    /**
      * 是否需要重定向
      *
      * @param response 原始的 {@link Response}
@@ -248,7 +380,7 @@ public final class ProgressManager {
     /**
      * 解决请求地址重定向后的兼容问题
      *
-     * @param map {@link #mRequestListeners} 或者 {@link #mResponseListeners}
+     * @param map      {@link #mRequestListeners} 或者 {@link #mResponseListeners}
      * @param response 原始的 {@link Response}
      */
     private void resolveRedirect(Map<String, List<ProgressListener>> map, Response response) {
