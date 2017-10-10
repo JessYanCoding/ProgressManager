@@ -1,12 +1,12 @@
 /**
  * Copyright 2017 JessYan
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,6 +42,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 /**
  * ================================================
  * Created by JessYan on 08/06/2017 12:59
@@ -73,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressInfo mLastDownloadingInfo;
     private ProgressInfo mLastUploadingingInfo;
     private Handler mHandler;
+    private String mNewImageUrl;
+    private String mNewDownloadUrl;
+    private String mNewUploadUrl;
 
 
     @Override
@@ -103,15 +107,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initListener() {
         //Glide 加载监听
-        ProgressManager.getInstance().addResponseListener(IMAGE_URL, getGlideListener());
+        mNewImageUrl = ProgressManager.getInstance().addDiffResponseListenerOnSameUrl(IMAGE_URL, getGlideListener());
 
 
         //Okhttp/Retofit 下载监听
-        ProgressManager.getInstance().addResponseListener(DOWNLOAD_URL, getDownloadListener());
+        mNewDownloadUrl = ProgressManager.getInstance().addDiffResponseListenerOnSameUrl(DOWNLOAD_URL, getDownloadListener());
 
 
         //Okhttp/Retofit 上传监听
-        ProgressManager.getInstance().addRequestListener(UPLOAD_URL, getUploadListener());
+        mNewUploadUrl = ProgressManager.getInstance().addDiffRequestListenerOnSameUrl(UPLOAD_URL, getUploadListener());
     }
 
 
@@ -259,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     writeToFile(getAssets().open("a.java"), file);
 
                     Request request = new Request.Builder()
-                            .url(UPLOAD_URL)
+                            .url(mNewUploadUrl)
                             .post(RequestBody.create(MediaType.parse("multipart/form-data"), file))
                             .build();
 
@@ -268,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (IOException e) {
                     e.printStackTrace();
                     //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-                    ProgressManager.getInstance().notifyOnErorr(UPLOAD_URL, e);
+                    ProgressManager.getInstance().notifyOnErorr(mNewUploadUrl, e);
                 }
             }
         }).start();
@@ -283,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 try {
                     Request request = new Request.Builder()
-                            .url(DOWNLOAD_URL)
+                            .url(mNewDownloadUrl)
                             .build();
 
                     Response response = mOkHttpClient.newCall(request).execute();
@@ -307,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (IOException e) {
                     e.printStackTrace();
                     //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-                    ProgressManager.getInstance().notifyOnErorr(DOWNLOAD_URL, e);
+                    ProgressManager.getInstance().notifyOnErorr(mNewDownloadUrl, e);
                 }
             }
         }).start();
@@ -319,13 +323,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void glideStart() {
         GlideApp.with(this)
-                .load(IMAGE_URL)
+                .load(mNewImageUrl)
                 .centerCrop()
                 .placeholder(R.color.colorPrimary)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(mImageView);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mNewImageUrl = null;// TODO: 10/10/2017 释放资源
+        mNewDownloadUrl = null;
+        mNewUploadUrl = null;
+    }
 
     public static File writeToFile(InputStream in, File file) throws IOException {
         FileOutputStream out = new FileOutputStream(file);

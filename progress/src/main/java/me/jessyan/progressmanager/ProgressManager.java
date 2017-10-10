@@ -71,7 +71,8 @@ public final class ProgressManager {
     public static final String OKHTTP_PACKAGE_NAME = "okhttp3.OkHttpClient";
     public static final boolean DEPENDENCY_OKHTTP;
     public static final int DEFAULT_REFRESH_TIME = 150;
-    public static final String IDENTIFICATION_NUMBER = "$JessYan$";
+    public static final String IDENTIFICATION_NUMBER = "?JessYan=";
+    public static final String IDENTIFICATION_HEADER = "JessYan";
 
 
     static {
@@ -191,10 +192,14 @@ public final class ProgressManager {
      * @return
      */
     public Request wrapRequestBody(Request request) {
-        if (request == null || request.body() == null)
+        if (request == null)
             return request;
 
         String key = request.url().toString();
+        request = pruneIdentification(key, request);
+
+        if (request.body() == null)
+            return request;
         if (mRequestListeners.containsKey(key)) {
             List<ProgressListener> listeners = mRequestListeners.get(key);
             return request.newBuilder()
@@ -202,6 +207,16 @@ public final class ProgressManager {
                     .build();
         }
         return request;
+    }
+
+    private Request pruneIdentification(String url, Request request) {
+        boolean needPrune = url.contains(IDENTIFICATION_NUMBER);
+        if (!needPrune)
+            return request;
+        return request.newBuilder()
+                .url(url.substring(0, url.indexOf(IDENTIFICATION_NUMBER)))
+                .header(IDENTIFICATION_HEADER, url)
+                .build();
     }
 
     /**
@@ -212,16 +227,23 @@ public final class ProgressManager {
      * @return
      */
     public Response wrapResponseBody(Response response) {
-        if (response == null || response.body() == null)
+        if (response == null)
             return response;
 
+        String key = response.request().url().toString();
+        if (!TextUtils.isEmpty(response.request().header(IDENTIFICATION_HEADER))) {
+            key = response.request().header(IDENTIFICATION_HEADER);
+        }
+
         if (haveRedirect(response)) {
-            resolveRedirect(mRequestListeners, response);
-            resolveRedirect(mResponseListeners, response);
+            resolveRedirect(mRequestListeners, response, key);
+            resolveRedirect(mResponseListeners, response, key);
             return response;
         }
 
-        String key = response.request().url().toString();
+        if (response.body() == null)
+            return response;
+
         if (mResponseListeners.containsKey(key)) {
             List<ProgressListener> listeners = mResponseListeners.get(key);
             return response.newBuilder()
@@ -248,7 +270,7 @@ public final class ProgressManager {
      * @return 加入了时间戳的新的 {@code url}
      */
     public String addDiffResponseListenerOnSameUrl(String originUrl, ProgressListener listener) {
-        return addDiffResponseListenerOnSameUrl(originUrl, String.valueOf(SystemClock.elapsedRealtime()), listener);
+        return addDiffResponseListenerOnSameUrl(originUrl, String.valueOf(SystemClock.elapsedRealtime() + listener.hashCode()), listener);
     }
 
     /**
@@ -264,6 +286,7 @@ public final class ProgressManager {
      * <p>
      * Example usage:
      * <pre> {@code
+     *
      * String newUrl = ProgressManager.getInstance().addDiffResponseListenerOnSameUrl(DOWNLOAD_URL, "id", getDownloadListener());
      * new Thread(new Runnable() {
      *  @Override
@@ -276,11 +299,12 @@ public final class ProgressManager {
      *       Response response = mOkHttpClient.newCall(request).execute();
      *      } catch (IOException e) {
      *       e.printStackTrace();
-     *       //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-     *       ProgressManager.getInstance().notifyOnErorr(DOWNLOAD_URL, e);
+     *       //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法,这里也要使用 newUrl
+     *       ProgressManager.getInstance().notifyOnErorr(newUrl, e);
      *     }
      *   }
      * }).start();
+     *
      * } </pre>
      *
      * @param originUrl {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
@@ -311,7 +335,7 @@ public final class ProgressManager {
      * @return 加入了时间戳的新的 {@code url}
      */
     public String addDiffRequestListenerOnSameUrl(String originUrl, ProgressListener listener) {
-        return addDiffRequestListenerOnSameUrl(originUrl, String.valueOf(SystemClock.elapsedRealtime()), listener);
+        return addDiffRequestListenerOnSameUrl(originUrl, String.valueOf(SystemClock.elapsedRealtime() + listener.hashCode()), listener);
     }
 
 
@@ -328,6 +352,7 @@ public final class ProgressManager {
      * <p>
      * Example usage:
      * <pre> {@code
+     *
      * String newUrl = ProgressManager.getInstance().addDiffRequestListenerOnSameUrl(UPLOAD_URL, "id", getUploadListener());
      * new Thread(new Runnable() {
      *  @Override
@@ -343,11 +368,12 @@ public final class ProgressManager {
      *      Response response = mOkHttpClient.newCall(request).execute();
      *     } catch (IOException e) {
      *      e.printStackTrace();
-     *      //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-     *      ProgressManager.getInstance().notifyOnErorr(DOWNLOAD_URL, e);
+     *      //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法,这里也要使用 newUrl
+     *      ProgressManager.getInstance().notifyOnErorr(newUrl, e);
      *    }
      *  }
      * }).start();
+     *
      * } </pre>
      *
      * @param originUrl {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
@@ -368,7 +394,7 @@ public final class ProgressManager {
      * @return
      */
     private boolean haveRedirect(Response response) {
-        String status = response.header("Status");
+        String status = String.valueOf(response.code());
         if (TextUtils.isEmpty(status))
             return false;
         if (status.contains("301") || status.contains("302") || status.contains("303") || status.contains("307")) {
@@ -382,14 +408,23 @@ public final class ProgressManager {
      *
      * @param map      {@link #mRequestListeners} 或者 {@link #mResponseListeners}
      * @param response 原始的 {@link Response}
+     * @param url      {@code url} 地址
      */
-    private void resolveRedirect(Map<String, List<ProgressListener>> map, Response response) {
-        String url = response.request().url().toString();
+    private void resolveRedirect(Map<String, List<ProgressListener>> map, Response response, String url) {
         List<ProgressListener> progressListeners = map.get(url); //查看此重定向 url ,是否已经注册过监听器
-        if (progressListeners != null) {
+        if (progressListeners != null && progressListeners.size() > 0) {
             String location = response.header("Location");// 重定向地址
-            if (!TextUtils.isEmpty(location) && !map.containsKey(location)) {
-                map.put(location, progressListeners); //将需要重定向地址的监听器,提供给重定向地址,保证重定向后也可以监听进度
+            if (!TextUtils.isEmpty(location)) {
+                if (!map.containsKey(location)) {
+                    map.put(location, progressListeners); //将需要重定向地址的监听器,提供给重定向地址,保证重定向后也可以监听进度
+                } else {
+                    List<ProgressListener> locationListener = map.get(location);
+                    for (ProgressListener listener : progressListeners) {
+                        if (!locationListener.contains(listener)) {
+                            locationListener.add(listener);
+                        }
+                    }
+                }
             }
         }
     }
