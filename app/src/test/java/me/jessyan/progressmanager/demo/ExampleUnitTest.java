@@ -7,12 +7,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
 
-import me.jessyan.progressmanager.ProgressListener;
-import me.jessyan.progressmanager.ProgressManager;
-import me.jessyan.progressmanager.body.ProgressInfo;
-import okhttp3.HttpUrl;
-import okhttp3.Request;
-
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -22,35 +16,15 @@ public class ExampleUnitTest {
 
     @Test
     public void test(){
-//        testWeakHashMapAPIs();
+        testWeakHashMapAPIs();
         testString();
-    }
-
-    private void testRequest(){
-        String newUrl = ProgressManager.getInstance().addDiffResponseListenerOnSameUrl("http://www.baidu.com/user", new ProgressListener() {
-            @Override
-            public void onProgress(ProgressInfo progressInfo) {
-
-            }
-
-            @Override
-            public void onError(long id, Exception e) {
-
-            }
-        });
-        Request request = new Request
-                .Builder()
-                .url(newUrl)
-                .build();
-        ProgressManager.getInstance().wrapRequestBody(request);
     }
 
     private void testString(){
         String s =  "http://www.baidu.com/user$JessYan$456";
-        String substring = s.substring(0, s.indexOf("$JessYan$"));
-        System.out.println(HttpUrl.parse("http://www.baidu.com/abc/d").toString());
+        int index = s.indexOf("$JessYan$");
+        String substring = s.substring(0, index);
         System.out.println(substring);
-        System.out.println(s);
     }
 
     private void testWeakHashMapAPIs() {

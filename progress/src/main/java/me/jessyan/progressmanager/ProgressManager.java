@@ -36,6 +36,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.internal.http2.Header;
 
 /**
  * ================================================
@@ -73,6 +74,7 @@ public final class ProgressManager {
     public static final int DEFAULT_REFRESH_TIME = 150;
     public static final String IDENTIFICATION_NUMBER = "?JessYan=";
     public static final String IDENTIFICATION_HEADER = "JessYan";
+    public static final String LOCATION_HEADER = "Location";
 
 
     static {
@@ -209,13 +211,22 @@ public final class ProgressManager {
         return request;
     }
 
+    /**
+     * 如果 {@code url} 中含有 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)}
+     * 或 {@link #addDiffRequestListenerOnSameUrl(String, String, ProgressListener)} 加入的标识符,则将加入标识符
+     * 从 {code url} 中删除掉,继续使用 {@code originUrl} 进行请求
+     *
+     * @param url     {@code url} 地址
+     * @param request 原始 {@link Request}
+     * @return 返回可能被修改过的 {@link Request}
+     */
     private Request pruneIdentification(String url, Request request) {
         boolean needPrune = url.contains(IDENTIFICATION_NUMBER);
         if (!needPrune)
             return request;
         return request.newBuilder()
-                .url(url.substring(0, url.indexOf(IDENTIFICATION_NUMBER)))
-                .header(IDENTIFICATION_HEADER, url)
+                .url(url.substring(0, url.indexOf(IDENTIFICATION_NUMBER))) //删除掉标识符
+                .header(IDENTIFICATION_HEADER, url) //将有标识符的 url 加入 header中, 便于wrapResponseBody(Response) 做处理
                 .build();
     }
 
@@ -231,13 +242,14 @@ public final class ProgressManager {
             return response;
 
         String key = response.request().url().toString();
-        if (!TextUtils.isEmpty(response.request().header(IDENTIFICATION_HEADER))) {
+        if (!TextUtils.isEmpty(response.request().header(IDENTIFICATION_HEADER))) { //从 header 中拿出有标识符的 url
             key = response.request().header(IDENTIFICATION_HEADER);
         }
 
         if (haveRedirect(response)) {
             resolveRedirect(mRequestListeners, response, key);
-            resolveRedirect(mResponseListeners, response, key);
+            String location = resolveRedirect(mResponseListeners, response, key);
+            response = modifyLocation(response, location);
             return response;
         }
 
@@ -254,10 +266,26 @@ public final class ProgressManager {
     }
 
     /**
+     * 查看 location 是否被加入了标识符, 如果是, 则放入 {@link Header} 中重新定义 {@link Response}
+     *
+     * @param response 原始的 {@link Response}
+     * @param location {@code location} 重定向地址
+     * @return 返回可能被修改过的 {@link Response}
+     */
+    private Response modifyLocation(Response response, String location) {
+        if (!TextUtils.isEmpty(location) && location.contains(IDENTIFICATION_NUMBER)) { //将被加入标识符的新的 location 放入 header 中
+            response = response.newBuilder()
+                    .header(LOCATION_HEADER, location)
+                    .build();
+        }
+        return response;
+    }
+
+    /**
      * 当出现需要使用同一个 {@code url} 根据 Post 请求参数的不同而下载不同资源的情况
      * 请使用 {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 代替 {@link #addResponseListener}
      * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 会返回一个加入了时间戳的新的 {@code url}
-     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行下载的请求即可
+     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行下载的请求即可 (当实际请求时依然使用 {@code originUrl} 进行网络请求)
      * <p>
      * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 与 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)}
      * 的区别在于:
@@ -277,7 +305,7 @@ public final class ProgressManager {
      * 当出现需要使用同一个 {@code url} 根据 Post 请求参数的不同而下载不同资源的情况
      * 请使用 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)} 代替 {@link #addResponseListener}
      * 请使用 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)} 会返回一个 {@code originUrl} 结合 {@code key} 生成的新的 {@code url}
-     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行下载的请求即可
+     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行下载的请求即可 (当实际请求时依然使用 {@code originUrl} 进行网络请求)
      * <p>
      * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 与 {@link #addDiffResponseListenerOnSameUrl(String, String, ProgressListener)}
      * 的区别在于:
@@ -322,7 +350,7 @@ public final class ProgressManager {
      * 当出现需要使用同一个 {@code url} 根据 Post 请求参数的不同而上传不同资源的情况
      * 请使用 {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 代替 {@link #addRequestListener}
      * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 会返回一个加入了时间戳的新的 {@code url}
-     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行上传的请求即可
+     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行上传的请求即可 (当实际请求时依然使用 {@code originUrl} 进行网络请求)
      * <p>
      * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 与 {@link #addDiffRequestListenerOnSameUrl(String, String, ProgressListener)}
      * 的区别在于:
@@ -343,7 +371,7 @@ public final class ProgressManager {
      * 当出现需要使用同一个 {@code url} 根据 Post 请求参数的不同而上传不同资源的情况
      * 请使用 {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 代替 {@link #addRequestListener}
      * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 会返回一个 {@code originUrl} 结合 {@code key} 生成的新的 {@code url}
-     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行上传的请求即可
+     * 请使用这个新的 {@code url} 去代替 {@code originUrl} 进行上传的请求即可 (当实际请求时依然使用 {@code originUrl} 进行网络请求)
      * <p>
      * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 与 {@link #addDiffRequestListenerOnSameUrl(String, String, ProgressListener)}
      * 的区别在于:
@@ -410,11 +438,15 @@ public final class ProgressManager {
      * @param response 原始的 {@link Response}
      * @param url      {@code url} 地址
      */
-    private void resolveRedirect(Map<String, List<ProgressListener>> map, Response response, String url) {
+    private String resolveRedirect(Map<String, List<ProgressListener>> map, Response response, String url) {
+        String location = null;
         List<ProgressListener> progressListeners = map.get(url); //查看此重定向 url ,是否已经注册过监听器
         if (progressListeners != null && progressListeners.size() > 0) {
-            String location = response.header("Location");// 重定向地址
+            location = response.header(LOCATION_HEADER);// 重定向地址
             if (!TextUtils.isEmpty(location)) {
+                if (url.contains(IDENTIFICATION_NUMBER) && !location.contains(IDENTIFICATION_NUMBER)) { //如果 url 有标识符,那也将标识符加入用于重定向的 location
+                    location += url.substring(url.indexOf(IDENTIFICATION_NUMBER), url.length());
+                }
                 if (!map.containsKey(location)) {
                     map.put(location, progressListeners); //将需要重定向地址的监听器,提供给重定向地址,保证重定向后也可以监听进度
                 } else {
@@ -427,6 +459,7 @@ public final class ProgressManager {
                 }
             }
         }
+        return location;
     }
 
 

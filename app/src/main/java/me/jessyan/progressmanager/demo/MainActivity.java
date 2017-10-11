@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 为什么这样做? 因为如果直接使用 String mUrl = "url", 这个 url 字符串会被加入全局字符串常量池, 池中的字符串将不会被回收
      * 既然 {@code key} 没被回收, 那 {@link WeakHashMap} 中的值也不会被移除
      */
-    public static final String IMAGE_URL = new String("https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png");
-    public static final String DOWNLOAD_URL = new String("https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/MVPArms.gif");
+    public static final String IMAGE_URL = new String("http://jessyancoding.github.io/images/RxCache.png");
+    public static final String DOWNLOAD_URL = new String("http://jessyancoding.github.io/images/RxCache.png");
     public static final String UPLOAD_URL = new String("http://upload.qiniu.com/");
 
     private ImageView mImageView;
