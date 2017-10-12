@@ -313,18 +313,17 @@ public final class ProgressManager {
      * {@link #addDiffResponseListenerOnSameUrl(String, ProgressListener)} 是直接使用时间戳来生成新的 {@code url}
      * <p>
      * Example usage:
-     * <pre> {@code
-     *
+     * <pre>
      * String newUrl = ProgressManager.getInstance().addDiffResponseListenerOnSameUrl(DOWNLOAD_URL, "id", getDownloadListener());
      * new Thread(new Runnable() {
-     *  @Override
-     *  public void run() {
-     *    try {
-     *       Request request = new Request.Builder()
-     *       .url(newUrl) // 请一定使用 addDiffResponseListenerOnSameUrl 返回的 newUrl 做请求
-     *       .build();
      *
-     *       Response response = mOkHttpClient.newCall(request).execute();
+     *   public void run() {
+     *     try {
+     *        Request request = new Request.Builder()
+     *        .url(newUrl) // 请一定使用 addDiffResponseListenerOnSameUrl 返回的 newUrl 做请求
+     *        .build();
+     *
+     *        Response response = mOkHttpClient.newCall(request).execute();
      *      } catch (IOException e) {
      *       e.printStackTrace();
      *       //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法,这里也要使用 newUrl
@@ -332,8 +331,7 @@ public final class ProgressManager {
      *     }
      *   }
      * }).start();
-     *
-     * } </pre>
+     * </pre>
      *
      * @param originUrl {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
      * @param key       {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
@@ -379,21 +377,20 @@ public final class ProgressManager {
      * {@link #addDiffRequestListenerOnSameUrl(String, ProgressListener)} 是直接使用时间戳来生成新的 {@code url}
      * <p>
      * Example usage:
-     * <pre> {@code
-     *
+     * <pre>
      * String newUrl = ProgressManager.getInstance().addDiffRequestListenerOnSameUrl(UPLOAD_URL, "id", getUploadListener());
      * new Thread(new Runnable() {
-     *  @Override
-     *  public void run() {
+     *
+     *    public void run() {
      *    try {
-     *      File file = new File(getCacheDir(), "cache");
+     *       File file = new File(getCacheDir(), "cache");
      *
-     *      Request request = new Request.Builder()
-     *      .url(newUrl) // 请一定使用 addDiffRequestListenerOnSameUrl 返回的 newUrl 做请求
-     *      .post(RequestBody.create(MediaType.parse("multipart/form-data"), file))
-     *      .build();
+     *       Request request = new Request.Builder()
+     *       .url(newUrl) // 请一定使用 addDiffRequestListenerOnSameUrl 返回的 newUrl 做请求
+     *       .post(RequestBody.create(MediaType.parse("multipart/form-data"), file))
+     *       .build();
      *
-     *      Response response = mOkHttpClient.newCall(request).execute();
+     *       Response response = mOkHttpClient.newCall(request).execute();
      *     } catch (IOException e) {
      *      e.printStackTrace();
      *      //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法,这里也要使用 newUrl
@@ -401,8 +398,7 @@ public final class ProgressManager {
      *    }
      *  }
      * }).start();
-     *
-     * } </pre>
+     * </pre>
      *
      * @param originUrl {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
      * @param key       {@code originUrl} 作为基础并结合 {@code key} 用于生成新的 {@code url} 作为标识符
