@@ -15,7 +15,6 @@
  */
 package me.jessyan.progressmanager.demo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -33,7 +32,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.WeakHashMap;
 
 import me.jessyan.progressmanager.ProgressListener;
 import me.jessyan.progressmanager.ProgressManager;
@@ -46,26 +44,16 @@ import okhttp3.Response;
 
 /**
  * ================================================
- * 这里展示框架的基本功能,高级功能请看 {@link AdvanceActivity}
- * <p>
+ * 这里为了展示本框架的高级功能,使用同一个 url 地址根据 Post 请求参数的不同而下载或上传不同的资源
+ *
+ * @see {@link #initListener}
  * Created by JessYan on 08/06/2017 12:59
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "MainActivity";
-    /**
-     * 全局持有 url 是为了使用 {@link WeakHashMap} 的特性,在 {@link ProgressManager} 中顶部有介绍
-     * 使用 String mUrl = new String("url");, 而不是 String mUrl = "url";
-     * 为什么这样做? 因为如果直接使用 String mUrl = "url", 这个 url 字符串会被加入全局字符串常量池, 池中的字符串将不会被回收
-     * 既然 {@code key} 没被回收, 那 {@link WeakHashMap} 中的值也不会被移除
-     * 在 {@link #onDestroy()} 中一定记得释放被引用的 url (将 url 设为 null), 这样框架就能在 java 虚拟机 GC 时释放对应的监听器
-     */
-    public String mImageUrl = new String("https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/step.png");
-    public String mDownloadUrl = new String("https://raw.githubusercontent.com/JessYanCoding/MVPArmsTemplate/master/art/MVPArms.gif");
-    public String mUploadUrl = new String("http://upload.qiniu.com/");
-
+public class AdvanceActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "AdvanceActivity";
     private ImageView mImageView;
     private OkHttpClient mOkHttpClient;
     private ProgressBar mGlideProgress;
@@ -78,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressInfo mLastDownloadingInfo;
     private ProgressInfo mLastUploadingingInfo;
     private Handler mHandler;
+    private String mNewImageUrl;
+    private String mNewDownloadUrl;
+    private String mNewUploadUrl;
 
 
     @Override
@@ -89,12 +80,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initListener();
         //在 Activity 中显示进度条的同时,也在 Fragment 中显示对应 url 的进度条,为了展示此框架的多端同步更新某一个进度信息
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
-                MainFragment.newInstance(mImageUrl, mDownloadUrl, mUploadUrl)).commit();
+                AdvanceFragment.newInstance(mNewImageUrl, mNewDownloadUrl, mNewUploadUrl)).commit();
     }
 
 
     private void initView() {
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_advance);
         mImageView = findViewById(R.id.imageView);
         mGlideProgress = findViewById(R.id.glide_progress);
         mDownloadProgress = findViewById(R.id.download_progress);
@@ -105,20 +96,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.glide_start).setOnClickListener(this);
         findViewById(R.id.download_start).setOnClickListener(this);
         findViewById(R.id.upload_start).setOnClickListener(this);
-        findViewById(R.id.advance).setOnClickListener(this);
     }
 
     private void initListener() {
+        //图片和下载 (上传也同样支持) 使用同一个 url 地址,是为了展示高级功能
+        //高级功能是为了应对当需要使用同一个 url 地址根据 Post 请求参数的不同而下载或上传不同资源的情况
+        //"http://jessyancoding.github.io/images/RxCache.png" 会重定向到 "http://jessyan.me/images/RxCache.png"
+        //所以也展示了高级功能同时完美兼容重定向
+        //这里需要注意的是虽然使用的是新的 url 地址进行上传或下载,但实际请求服务器的 url 地址,还是原始的 url 地址
+        //在监听器内部已经进行了处理,所以高级功能并不会影响服务器的请求
+
         //Glide 加载监听
-        ProgressManager.getInstance().addResponseListener(mImageUrl, getGlideListener());
+        mNewImageUrl = ProgressManager
+                .getInstance()
+                .addDiffResponseListenerOnSameUrl("http://jessyancoding.github.io/images/RxCache.png", getGlideListener());
 
 
         //Okhttp/Retofit 下载监听
-        ProgressManager.getInstance().addResponseListener(mDownloadUrl, getDownloadListener());
+        mNewDownloadUrl = ProgressManager
+                .getInstance()
+                .addDiffResponseListenerOnSameUrl("http://jessyancoding.github.io/images/RxCache.png", getDownloadListener());
 
 
         //Okhttp/Retofit 上传监听
-        ProgressManager.getInstance().addRequestListener(mUploadUrl, getUploadListener());
+        mNewUploadUrl = ProgressManager
+                .getInstance()
+                .addDiffRequestListenerOnSameUrl("http://upload.qiniu.com/", "test", getUploadListener());
     }
 
 
@@ -249,9 +252,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.upload_start:
                 uploadStart();
                 break;
-            case R.id.advance:
-                startActivity(new Intent(getApplicationContext(),AdvanceActivity.class));
-                break;
         }
     }
 
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     writeToFile(getAssets().open("a.java"), file);
 
                     Request request = new Request.Builder()
-                            .url(mUploadUrl)
+                            .url(mNewUploadUrl)
                             .post(RequestBody.create(MediaType.parse("multipart/form-data"), file))
                             .build();
 
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (IOException e) {
                     e.printStackTrace();
                     //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-                    ProgressManager.getInstance().notifyOnErorr(mUploadUrl, e);
+                    ProgressManager.getInstance().notifyOnErorr(mNewUploadUrl, e);
                 }
             }
         }).start();
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 try {
                     Request request = new Request.Builder()
-                            .url(mDownloadUrl)
+                            .url(mNewDownloadUrl)
                             .build();
 
                     Response response = mOkHttpClient.newCall(request).execute();
@@ -317,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (IOException e) {
                     e.printStackTrace();
                     //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-                    ProgressManager.getInstance().notifyOnErorr(mDownloadUrl, e);
+                    ProgressManager.getInstance().notifyOnErorr(mNewDownloadUrl, e);
                 }
             }
         }).start();
@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void glideStart() {
         GlideApp.with(this)
-                .load(mImageUrl)
+                .load(mNewImageUrl)
                 .centerCrop()
                 .placeholder(R.color.colorPrimary)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -340,9 +340,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         //记得释放引用
-        mImageUrl = null;
-        mDownloadUrl = null;
-        mUploadUrl = null;
+        mNewImageUrl = null;
+        mNewDownloadUrl = null;
+        mNewUploadUrl = null;
     }
 
     public static File writeToFile(InputStream in, File file) throws IOException {

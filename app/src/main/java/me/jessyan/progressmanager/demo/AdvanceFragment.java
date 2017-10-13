@@ -41,8 +41,8 @@ import me.jessyan.progressmanager.body.ProgressInfo;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class MainFragment extends Fragment {
-    private static final String TAG = "MainFragment";
+public class AdvanceFragment extends Fragment {
+    private static final String TAG = "AdvanceFragment";
 
     private ProgressBar mGlideProgress;
     private ProgressBar mDownloadProgress;
@@ -57,8 +57,8 @@ public class MainFragment extends Fragment {
     private Handler mHandler;
     private static final String URL_BUNDLE_KEY = "url_bundle_key";
 
-    public static MainFragment newInstance(String imageUrl, String downloadUrl, String uploadUrl) {
-        MainFragment fragment = new MainFragment();
+    public static AdvanceFragment newInstance(String imageUrl, String downloadUrl, String uploadUrl) {
+        AdvanceFragment fragment = new AdvanceFragment();
         Bundle bundle = new Bundle();
         ArrayList<String> list = new ArrayList<>(Arrays.asList(imageUrl, downloadUrl, uploadUrl));
         bundle.putStringArrayList(URL_BUNDLE_KEY, list);
@@ -105,7 +105,7 @@ public class MainFragment extends Fragment {
 
         //Okhttp/Retofit 上传监听
         ProgressManager.getInstance().addRequestListener(list.get(2), getUploadListener());
-        list.clear();//清理 list 里的引用
+        list.clear(); //清理 list 的引用
     }
 
 
