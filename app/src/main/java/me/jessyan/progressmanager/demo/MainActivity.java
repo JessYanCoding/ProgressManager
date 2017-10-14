@@ -43,10 +43,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * ================================================
- * 这里展示框架的基本功能,高级功能请看 {@link AdvanceActivity}
+ * 这里展示框架的基本功能, 高级功能请看 {@link AdvanceActivity}
+ * 代码虽然多,但核心方法就在 {@link BaseApplication#onCreate()} 和 {@link #initListener()} 这两处
+ * 其他代码都是在做请求和下载以及 UI 展示, 和框架没有任何关系, 可以作为参考, 但这些代码每个项目都不一样
+ * 比如你喜欢用 Retrofit 的 {@code @Multipart} 进行资源的上传, 这些看个人的喜好进行修改
+ * <p>
+ * 请注意 Demo 只展示了 Okhttp 的下载上传监听和 Glide 的加载监听
+ * 但是 Retrofit 的下载和上传监听同样完美支持
+ * 因为 Retrofit 底层默认使用的是 Okhttp 做网络请求, 所以只要您照着 {@link BaseApplication#onCreate()} 中的代码
+ * 给 Okhttp 配置了 {@link okhttp3.Interceptor}, 并且使用 {@link ProgressManager#addResponseListener(String, ProgressListener)}
+ * 或 {@link ProgressManager#addResponseListener(String, ProgressListener)} 给对应的 {@code url} 添加了监听器
+ * <p>
+ * 当做了以上两步操作后, 不管您是使用 Retrofit, Okhttp 还是 Glide, 以及请求或下载的方式, 代码的结构层次, 这些东西不管如何变化, 都不会对监听效果有任何影响
+ * 只要这个 {@code url} 存在上传 (请求时有 {@link RequestBody}) 或下载 (服务器有返回 {@link ResponseBody}) 的动作时, 监听器就一定会被调用
  * <p>
  * Created by JessYan on 08/06/2017 12:59
  * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
@@ -250,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 uploadStart();
                 break;
             case R.id.advance:
-                startActivity(new Intent(getApplicationContext(),AdvanceActivity.class));
+                startActivity(new Intent(getApplicationContext(), AdvanceActivity.class));
                 break;
         }
     }
