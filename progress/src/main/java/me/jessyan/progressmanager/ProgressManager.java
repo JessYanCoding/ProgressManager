@@ -246,7 +246,7 @@ public final class ProgressManager {
             key = response.request().header(IDENTIFICATION_HEADER);
         }
 
-        if (haveRedirect(response)) {
+        if (response.isRedirect()) {
             resolveRedirect(mRequestListeners, response, key);
             String location = resolveRedirect(mResponseListeners, response, key);
             response = modifyLocation(response, location);
@@ -409,22 +409,6 @@ public final class ProgressManager {
         String newUrl = originUrl + IDENTIFICATION_NUMBER + key;
         addRequestListener(newUrl, listener);
         return newUrl;
-    }
-
-    /**
-     * 是否需要重定向
-     *
-     * @param response 原始的 {@link Response}
-     * @return
-     */
-    private boolean haveRedirect(Response response) {
-        String status = String.valueOf(response.code());
-        if (TextUtils.isEmpty(status))
-            return false;
-        if (status.contains("301") || status.contains("302") || status.contains("303") || status.contains("307")) {
-            return true;
-        }
-        return false;
     }
 
     /**
