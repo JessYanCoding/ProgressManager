@@ -23,8 +23,8 @@
 * Low coupling, the actual request and the progress of the receiver does not exist directly or indirectly, that can be anywhere in **App** to receive progress information.
 * Low intrusion, use this framework you do not need to change the code before uploading or downloading, ie using or not using this framework does not affect the original code.
 * Multi-end synchronization, the same data source upload or download progress can specify a number of different receivers, less to use **EventBus** achieve multiple port synchronization update progress.
-* Support multi-file upload
-* Support **URL** redirection
+* Support multi-file upload.
+* Support **URL** redirection.
 * Automatic management of the listener, less to manually cancel the trouble of the listener.
 * The default run in the main line layer, less to switch the thread of trouble.
 * Lightweight framework, does not contain any three-party library, very small size.
