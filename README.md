@@ -1,9 +1,11 @@
 # ProgressManager
-[ ![Bintray](https://img.shields.io/badge/bintray-v1.5.0-brightgreen.svg) ](https://bintray.com/jessyancoding/maven/progressmanager/1.5.0/link)
+[ ![Jcenter](https://img.shields.io/badge/Jcenter-v1.5.0-brightgreen.svg?style=flat-square) ](https://bintray.com/jessyancoding/maven/progressmanager/1.5.0/link)
 [ ![Build Status](https://travis-ci.org/JessYanCoding/ProgressManager.svg?branch=master) ](https://travis-ci.org/JessYanCoding/ProgressManager)
-[ ![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ProgressManager-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5865)
+[ ![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ProgressManager-brightgreen.svg?style=flat-square)](https://android-arsenal.com/details/1/5865)
 [ ![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat-square) ](https://developer.android.com/about/versions/android-4.0.html)
 [ ![License](http://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square) ](http://www.apache.org/licenses/LICENSE-2.0)
+[ ![Author](https://img.shields.io/badge/Author-JessYan-orange.svg?style=flat-square) ](https://www.jianshu.com/u/1d0c0bc634db)
+[ ![QQ-Group](https://img.shields.io/badge/QQ群-301733278-orange.svg?style=flat-square) ](https://shang.qq.com/wpa/qunwpa?idkey=1a5dc5e9b2e40a780522f46877ba243eeb64405d42398643d544d3eec6624917)
 
 
 ## Listen the progress of  downloading and uploading in Okhttp (compatible Retrofit and Glide).
