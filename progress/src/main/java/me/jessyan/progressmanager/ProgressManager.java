@@ -121,6 +121,7 @@ public final class ProgressManager {
      * @param refreshTime 间隔时间,单位毫秒
      */
     public void setRefreshTime(int refreshTime) {
+        if (refreshTime < 0 ) throw new IllegalArgumentException("refreshTime must be >= 0");
         this.mRefreshTime = refreshTime;
     }
 
@@ -187,6 +188,7 @@ public final class ProgressManager {
      * @return
      */
     public OkHttpClient.Builder with(OkHttpClient.Builder builder) {
+        checkNotNull(builder, "builder cannot be null");
         return builder
                 .addNetworkInterceptor(mInterceptor);
     }
