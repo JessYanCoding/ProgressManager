@@ -69,12 +69,12 @@ public final class ProgressManager {
 
     private static volatile ProgressManager mProgressManager;
 
-    public static final String OKHTTP_PACKAGE_NAME = "okhttp3.OkHttpClient";
-    public static final boolean DEPENDENCY_OKHTTP;
-    public static final int DEFAULT_REFRESH_TIME = 150;
-    public static final String IDENTIFICATION_NUMBER = "?JessYan=";
-    public static final String IDENTIFICATION_HEADER = "JessYan";
-    public static final String LOCATION_HEADER = "Location";
+    private static final String OKHTTP_PACKAGE_NAME = "okhttp3.OkHttpClient";
+    private static final boolean DEPENDENCY_OKHTTP;
+    private static final int DEFAULT_REFRESH_TIME = 150;
+    private static final String IDENTIFICATION_NUMBER = "?JessYan=";
+    private static final String IDENTIFICATION_HEADER = "JessYan";
+    private static final String LOCATION_HEADER = "Location";
 
 
     static {
@@ -131,6 +131,8 @@ public final class ProgressManager {
      * @param listener 当此 {@code url} 地址存在上传的动作时,此监听器将被调用
      */
     public void addRequestListener(String url, ProgressListener listener) {
+        checkNotNull(url, "url cannot be null");
+        checkNotNull(listener, "listener cannot be null");
         List<ProgressListener> progressListeners;
         synchronized (ProgressManager.class) {
             progressListeners = mRequestListeners.get(url);
@@ -149,6 +151,8 @@ public final class ProgressManager {
      * @param listener 当此 {@code url} 地址存在下载的动作时,此监听器将被调用
      */
     public void addResponseListener(String url, ProgressListener listener) {
+        checkNotNull(url, "url cannot be null");
+        checkNotNull(listener, "listener cannot be null");
         List<ProgressListener> progressListeners;
         synchronized (ProgressManager.class) {
             progressListeners = mResponseListeners.get(url);
@@ -171,6 +175,7 @@ public final class ProgressManager {
      * @param e   错误
      */
     public void notifyOnErorr(String url, Exception e) {
+        checkNotNull(url, "url cannot be null");
         forEachListenersOnError(mRequestListeners, url, e);
         forEachListenersOnError(mResponseListeners, url, e);
     }
@@ -453,4 +458,10 @@ public final class ProgressManager {
         }
     }
 
+    static <T> T checkNotNull(T object, String message) {
+        if (object == null) {
+            throw new NullPointerException(message);
+        }
+        return object;
+    }
 }
