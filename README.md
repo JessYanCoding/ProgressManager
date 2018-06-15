@@ -33,7 +33,7 @@
 
 ## Download
 ``` gradle
- compile 'me.jessyan:progressmanager:1.5.0'
+ implementation 'me.jessyan:progressmanager:1.5.0'
 ```
 
 ## Usage
