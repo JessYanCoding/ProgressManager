@@ -145,6 +145,13 @@ public final class ProgressManager {
         progressListeners.add(listener);
     }
 
+    public void removeRequestListener(String url) {
+        checkNotNull(url, "url cannot be null");
+        synchronized (ProgressManager.class) {
+            mRequestListeners.remove(url);
+        }
+    }
+
     /**
      * 将需要被监听下载进度的 {@code url} 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
      *
@@ -163,6 +170,13 @@ public final class ProgressManager {
             }
         }
         progressListeners.add(listener);
+    }
+
+    public void removeResponseListener(String url) {
+        checkNotNull(url, "url cannot be null");
+        synchronized (ProgressManager.class) {
+            mResponseListeners.remove(url);
+        }
     }
 
 
