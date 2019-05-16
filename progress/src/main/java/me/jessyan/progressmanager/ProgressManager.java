@@ -209,13 +209,21 @@ public final class ProgressManager {
 
         if (request.body() == null)
             return request;
-        if (mRequestListeners.containsKey(key)) {
-            List<ProgressListener> listeners = mRequestListeners.get(key);
-            return request.newBuilder()
-                    .method(request.method(), new ProgressRequestBody(mHandler, request.body(), listeners, mRefreshTime))
-                    .build();
+
+        //Double Check
+        List<ProgressListener> listeners = mRequestListeners.get(key);
+        if (listeners == null){
+            synchronized (ProgressManager.class){
+                listeners = mRequestListeners.get(key);
+                if (listeners  == null){
+                    listeners = new LinkedList<>();
+                    mRequestListeners.put(key,listeners);
+                }
+            }
         }
-        return request;
+        return request.newBuilder()
+                .method(request.method(), new ProgressRequestBody(mHandler, request.body(), listeners, mRefreshTime))
+                .build();
     }
 
     /**
@@ -263,13 +271,19 @@ public final class ProgressManager {
         if (response.body() == null)
             return response;
 
-        if (mResponseListeners.containsKey(key)) {
-            List<ProgressListener> listeners = mResponseListeners.get(key);
-            return response.newBuilder()
-                    .body(new ProgressResponseBody(mHandler, response.body(), listeners, mRefreshTime))
-                    .build();
+        List<ProgressListener> listeners = mResponseListeners.get(key);
+        if (listeners == null){
+            synchronized (ProgressManager.class){
+                listeners = mResponseListeners.get(key);
+                if (listeners  == null){
+                    listeners = new LinkedList<>();
+                    mResponseListeners.put(key,listeners);
+                }
+            }
         }
-        return response;
+        return response.newBuilder()
+                .body(new ProgressResponseBody(mHandler, response.body(), listeners, mRefreshTime))
+                .build();
     }
 
     /**
@@ -428,20 +442,28 @@ public final class ProgressManager {
     private String resolveRedirect(Map<String, List<ProgressListener>> map, Response response, String url) {
         String location = null;
         List<ProgressListener> progressListeners = map.get(url); //查看此重定向 url ,是否已经注册过监听器
-        if (progressListeners != null && progressListeners.size() > 0) {
-            location = response.header(LOCATION_HEADER);// 重定向地址
-            if (!TextUtils.isEmpty(location)) {
-                if (url.contains(IDENTIFICATION_NUMBER) && !location.contains(IDENTIFICATION_NUMBER)) { //如果 url 有标识符,那也将标识符加入用于重定向的 location
-                    location += url.substring(url.indexOf(IDENTIFICATION_NUMBER), url.length());
+        if (progressListeners == null){
+            synchronized (ProgressManager.class){
+                progressListeners = map.get(url);
+                if (progressListeners == null){
+                    progressListeners = new LinkedList<>();
+                    map.put(url,progressListeners);
                 }
-                if (!map.containsKey(location)) {
-                    map.put(location, progressListeners); //将需要重定向地址的监听器,提供给重定向地址,保证重定向后也可以监听进度
-                } else {
-                    List<ProgressListener> locationListener = map.get(location);
-                    for (ProgressListener listener : progressListeners) {
-                        if (!locationListener.contains(listener)) {
-                            locationListener.add(listener);
-                        }
+            }
+        }
+
+        location = response.header(LOCATION_HEADER);// 重定向地址
+        if (!TextUtils.isEmpty(location)) {
+            if (url.contains(IDENTIFICATION_NUMBER) && !location.contains(IDENTIFICATION_NUMBER)) { //如果 url 有标识符,那也将标识符加入用于重定向的 location
+                location += url.substring(url.indexOf(IDENTIFICATION_NUMBER), url.length());
+            }
+            if (!map.containsKey(location)) {
+                map.put(location, progressListeners); //将需要重定向地址的监听器,提供给重定向地址,保证重定向后也可以监听进度
+            } else {
+                List<ProgressListener> locationListeners = map.get(location);
+                for (ProgressListener listener : progressListeners) {
+                    if (!locationListeners.contains(listener)) {
+                        locationListeners.add(listener);
                     }
                 }
             }

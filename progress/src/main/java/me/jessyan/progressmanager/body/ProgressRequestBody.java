@@ -44,14 +44,14 @@ public class ProgressRequestBody extends RequestBody {
     protected Handler mHandler;
     protected int mRefreshTime;
     protected final RequestBody mDelegate;
-    protected final ProgressListener[] mListeners;
+    protected final List<ProgressListener> mListeners;
     protected final ProgressInfo mProgressInfo;
     private BufferedSink mBufferedSink;
 
 
     public ProgressRequestBody(Handler handler, RequestBody delegate, List<ProgressListener> listeners, int refreshTime) {
         this.mDelegate = delegate;
-        this.mListeners = listeners.toArray(new ProgressListener[listeners.size()]);
+        this.mListeners = listeners;
         this.mHandler = handler;
         this.mRefreshTime = refreshTime;
         this.mProgressInfo = new ProgressInfo(System.currentTimeMillis());
@@ -82,8 +82,8 @@ public class ProgressRequestBody extends RequestBody {
             mBufferedSink.flush();
         } catch (IOException e) {
             e.printStackTrace();
-            for (int i = 0; i < mListeners.length; i++) {
-                mListeners[i].onError(mProgressInfo.getId(), e);
+            for (int i = 0; i < mListeners.size(); i++) {
+                mListeners.get(i).onError(mProgressInfo.getId(), e);
             }
             throw e;
         }
@@ -104,8 +104,8 @@ public class ProgressRequestBody extends RequestBody {
                 super.write(source, byteCount);
             } catch (IOException e) {
                 e.printStackTrace();
-                for (int i = 0; i < mListeners.length; i++) {
-                    mListeners[i].onError(mProgressInfo.getId(), e);
+                for (int i = 0; i < mListeners.size(); i++) {
+                    mListeners.get(i).onError(mProgressInfo.getId(), e);
                 }
                 throw e;
             }
@@ -114,14 +114,14 @@ public class ProgressRequestBody extends RequestBody {
             }
             totalBytesRead += byteCount;
             tempSize += byteCount;
-            if (mListeners != null) {
+            if (!mListeners.isEmpty()) {
                 long curTime = SystemClock.elapsedRealtime();
                 if (curTime - lastRefreshTime >= mRefreshTime || totalBytesRead == mProgressInfo.getContentLength()) {
                     final long finalTempSize = tempSize;
                     final long finalTotalBytesRead = totalBytesRead;
                     final long finalIntervalTime = curTime - lastRefreshTime;
-                    for (int i = 0; i < mListeners.length; i++) {
-                        final ProgressListener listener = mListeners[i];
+                    for (int i = 0; i < mListeners.size(); i++) {
+                        final ProgressListener listener = mListeners.get(i);
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
