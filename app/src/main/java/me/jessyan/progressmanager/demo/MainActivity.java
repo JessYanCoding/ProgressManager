@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (IOException e) {
                     e.printStackTrace();
                     //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-                    ProgressManager.getInstance().notifyOnErorr(mUploadUrl, e);
+                    ProgressManager.getInstance().notifyOnError(mUploadUrl, e);
                 }
             }
         }).start();
@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (IOException e) {
                     e.printStackTrace();
                     //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-                    ProgressManager.getInstance().notifyOnErorr(mDownloadUrl, e);
+                    ProgressManager.getInstance().notifyOnError(mDownloadUrl, e);
                 }
             }
         }).start();

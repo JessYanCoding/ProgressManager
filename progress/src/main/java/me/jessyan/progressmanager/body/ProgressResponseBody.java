@@ -19,7 +19,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import me.jessyan.progressmanager.ProgressListener;
 import okhttp3.MediaType;
@@ -44,11 +44,11 @@ public class ProgressResponseBody extends ResponseBody {
     protected Handler mHandler;
     protected int mRefreshTime;
     protected final ResponseBody mDelegate;
-    protected final List<ProgressListener> mListeners;
+    protected final Set<ProgressListener> mListeners;
     protected final ProgressInfo mProgressInfo;
     private BufferedSource mBufferedSource;
 
-    public ProgressResponseBody(Handler handler, ResponseBody responseBody, List<ProgressListener> listeners, int refreshTime) {
+    public ProgressResponseBody(Handler handler, ResponseBody responseBody, Set<ProgressListener> listeners, int refreshTime) {
         this.mDelegate = responseBody;
         this.mListeners = listeners;
         this.mHandler = handler;
@@ -87,8 +87,8 @@ public class ProgressResponseBody extends ResponseBody {
                     bytesRead = super.read(sink, byteCount);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    for (int i = 0; i < mListeners.size(); i++) {
-                        mListeners.get(i).onError(mProgressInfo.getId(), e);
+                    for (ProgressListener listener:mListeners) {
+                        listener.onError(mProgressInfo.getId(), e);
                     }
                     throw e;
                 }
@@ -105,8 +105,7 @@ public class ProgressResponseBody extends ResponseBody {
                         final long finalTempSize = tempSize;
                         final long finalTotalBytesRead = totalBytesRead;
                         final long finalIntervalTime = curTime - lastRefreshTime;
-                        for (int i = 0; i < mListeners.size(); i++) {
-                            final ProgressListener listener = mListeners.get(i);
+                        for (final ProgressListener listener:mListeners) {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
