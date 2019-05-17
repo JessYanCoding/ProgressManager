@@ -19,7 +19,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import me.jessyan.progressmanager.ProgressListener;
 import okhttp3.MediaType;
@@ -44,14 +44,14 @@ public class ProgressRequestBody extends RequestBody {
     protected Handler mHandler;
     protected int mRefreshTime;
     protected final RequestBody mDelegate;
-    protected final ProgressListener[] mListeners;
+    protected final Set<ProgressListener> mListeners;
     protected final ProgressInfo mProgressInfo;
     private BufferedSink mBufferedSink;
 
 
-    public ProgressRequestBody(Handler handler, RequestBody delegate, List<ProgressListener> listeners, int refreshTime) {
+    public ProgressRequestBody(Handler handler, RequestBody delegate, Set<ProgressListener> listeners, int refreshTime) {
         this.mDelegate = delegate;
-        this.mListeners = listeners.toArray(new ProgressListener[listeners.size()]);
+        this.mListeners = listeners;
         this.mHandler = handler;
         this.mRefreshTime = refreshTime;
         this.mProgressInfo = new ProgressInfo(System.currentTimeMillis());
@@ -82,8 +82,8 @@ public class ProgressRequestBody extends RequestBody {
             mBufferedSink.flush();
         } catch (IOException e) {
             e.printStackTrace();
-            for (int i = 0; i < mListeners.length; i++) {
-                mListeners[i].onError(mProgressInfo.getId(), e);
+            for (ProgressListener listener:mListeners) {
+                listener.onError(mProgressInfo.getId(), e);
             }
             throw e;
         }
@@ -104,8 +104,8 @@ public class ProgressRequestBody extends RequestBody {
                 super.write(source, byteCount);
             } catch (IOException e) {
                 e.printStackTrace();
-                for (int i = 0; i < mListeners.length; i++) {
-                    mListeners[i].onError(mProgressInfo.getId(), e);
+                for (ProgressListener listener:mListeners) {
+                    listener.onError(mProgressInfo.getId(), e);
                 }
                 throw e;
             }
@@ -114,14 +114,13 @@ public class ProgressRequestBody extends RequestBody {
             }
             totalBytesRead += byteCount;
             tempSize += byteCount;
-            if (mListeners != null) {
+            if (!mListeners.isEmpty()) {
                 long curTime = SystemClock.elapsedRealtime();
                 if (curTime - lastRefreshTime >= mRefreshTime || totalBytesRead == mProgressInfo.getContentLength()) {
                     final long finalTempSize = tempSize;
                     final long finalTotalBytesRead = totalBytesRead;
                     final long finalIntervalTime = curTime - lastRefreshTime;
-                    for (int i = 0; i < mListeners.length; i++) {
-                        final ProgressListener listener = mListeners[i];
+                    for (final ProgressListener listener:mListeners) {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {

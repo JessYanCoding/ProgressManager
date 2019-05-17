@@ -278,7 +278,7 @@ public class AdvanceActivity extends AppCompatActivity implements View.OnClickLi
                 } catch (IOException e) {
                     e.printStackTrace();
                     //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-                    ProgressManager.getInstance().notifyOnErorr(mNewUploadUrl, e);
+                    ProgressManager.getInstance().notifyOnError(mNewUploadUrl, e);
                 }
             }
         }).start();
@@ -317,7 +317,7 @@ public class AdvanceActivity extends AppCompatActivity implements View.OnClickLi
                 } catch (IOException e) {
                     e.printStackTrace();
                     //当外部发生错误时,使用此方法可以通知所有监听器的 onError 方法
-                    ProgressManager.getInstance().notifyOnErorr(mNewDownloadUrl, e);
+                    ProgressManager.getInstance().notifyOnError(mNewDownloadUrl, e);
                 }
             }
         }).start();
