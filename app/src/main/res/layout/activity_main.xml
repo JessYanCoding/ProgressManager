@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,62 +12,55 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/glide_start"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Glide start"
-            />
+            android:text="Glide start" />
 
         <Button
             android:id="@+id/download_start"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="download start"
-            />
+            android:text="download start" />
 
         <Button
             android:id="@+id/upload_start"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="upload start"
-            />
+            android:text="upload start" />
+
         <Button
             android:id="@+id/advance"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="advance"
-            />
+            android:text="advance" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="#3ff"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -77,16 +69,14 @@
                 android:text="In Activity"
                 android:textColor="#fff"
                 android:textSize="20dp"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -95,8 +85,7 @@
                     android:text="Glide          "
                     android:textColor="#fff"
                     android:textSize="17dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <ProgressBar
                     android:id="@+id/glide_progress"
@@ -105,15 +94,14 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
                     android:max="100"
-                    android:progress="0"/>
+                    android:progress="0" />
 
                 <TextView
                     android:id="@+id/glide_progress_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="100%"
                     android:textColor="#fff"
-                    />
+                    tools:text="100%" />
 
             </LinearLayout>
 
@@ -122,8 +110,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -132,8 +119,7 @@
                     android:text="Download  "
                     android:textColor="#fff"
                     android:textSize="17dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <ProgressBar
                     android:id="@+id/download_progress"
@@ -142,15 +128,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:max="100"
-                    android:progress="0"/>
+                    android:progress="0" />
 
                 <TextView
                     android:id="@+id/download_progress_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="100%"
                     android:textColor="#fff"
-                    />
+                    tools:text="100%" />
 
             </LinearLayout>
 
@@ -159,8 +144,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,8 +153,7 @@
                     android:text="Upload       "
                     android:textColor="#fff"
                     android:textSize="17dp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <ProgressBar
                     android:id="@+id/upload_progress"
@@ -179,15 +162,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:max="100"
-                    android:progress="0"/>
+                    android:progress="0" />
 
                 <TextView
                     android:id="@+id/upload_progress_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="100%"
                     android:textColor="#fff"
-                    />
+                    tools:text="100%" />
 
             </LinearLayout>
 
@@ -198,10 +180,7 @@
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            />
-
-
+            android:layout_weight="1" />
 
 
     </LinearLayout>

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -13,12 +15,43 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
+
+    // region java compile options
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(11))
+        }
+    }
+
+    // endregion
+
+    // region kotlin compile options
+
+    kotlinOptions {
+        jvmTarget = "11"
+        freeCompilerArgs += [
+                // disable linting for opt-in annotations
+                "-Xopt-in=kotlin.RequiresOptIn",
+        ]
+    }
+
+    // endregion
+
     lintOptions {
         abortOnError false
         warning 'InvalidPackage'
@@ -26,7 +59,18 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.squareup.okhttp3:okhttp:3.10.0'
+    compileOnly 'com.squareup.okhttp3:okhttp:4.9.2'
 }
 
-apply from: 'bintray.gradle'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = "me.jessyan"
+                artifactId = 'progressmanager'
+                version = libraryVersion
+            }
+        }
+    }
+}
