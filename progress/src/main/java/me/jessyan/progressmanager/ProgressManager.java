@@ -24,6 +24,7 @@ import android.text.TextUtils;
 
 import java.io.IOException;
 import java.lang.ref.ReferenceQueue;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -145,6 +146,30 @@ public final class ProgressManager {
         progressListeners.add(listener);
     }
 
+    public void removeRequestListener(String url) {
+        checkNotNull(url, "url cannot be null");
+        synchronized (ProgressManager.class) {
+            mRequestListeners.remove(url);
+        }
+    }
+
+    public void removeRequestListener(ProgressListener listener) {
+        checkNotNull(listener, "listener cannot be null");
+        synchronized (ProgressManager.class) {
+
+            Iterator<Map.Entry<String, List<ProgressListener>>> it = mRequestListeners.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, List<ProgressListener>> pair = it.next();
+                List progressListeners = pair.getValue();
+
+                progressListeners.remove(listener);
+
+                if (progressListeners.isEmpty())
+                    it.remove(); // avoids a ConcurrentModificationException
+            }
+        }
+    }
+
     /**
      * 将需要被监听下载进度的 {@code url} 注册到管理器,此操作请在页面初始化时进行,切勿多次注册同一个(内容相同)监听器
      *
@@ -163,6 +188,24 @@ public final class ProgressManager {
             }
         }
         progressListeners.add(listener);
+    }
+
+
+    public void removeResponseListener(ProgressListener listener) {
+        checkNotNull(listener, "listener cannot be null");
+        synchronized (ProgressManager.class) {
+
+            Iterator<Map.Entry<String, List<ProgressListener>>> it = mResponseListeners.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, List<ProgressListener>> pair = it.next();
+                List progressListeners = pair.getValue();
+
+                progressListeners.remove(listener);
+
+                if (progressListeners.isEmpty())
+                    it.remove(); // avoids a ConcurrentModificationException
+            }
+        }
     }
 
 

@@ -17,13 +17,14 @@ package me.jessyan.progressmanager.demo;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -79,8 +80,8 @@ public class AdvanceActivity extends AppCompatActivity implements View.OnClickLi
         initView();
         initListener();
         //在 Activity 中显示进度条的同时,也在 Fragment 中显示对应 url 的进度条,为了展示此框架的多端同步更新某一个进度信息
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
-                AdvanceFragment.newInstance(mNewImageUrl, mNewDownloadUrl, mNewUploadUrl)).commit();
+//        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+//                AdvanceFragment.newInstance(mNewImageUrl, mNewDownloadUrl, mNewUploadUrl)).commit();
     }
 
 
