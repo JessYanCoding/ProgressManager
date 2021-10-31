@@ -34,15 +34,15 @@
 
 ## Download
 ``` gradle
-    allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
-    dependencies {
-	        implementation 'com.github.kibotu:ProgressManager:Tag'
-	}
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+dependencies {
+    implementation 'com.github.kibotu:ProgressManager:Tag'
+}
 ```
 
 ## Usage
