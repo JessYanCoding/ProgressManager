@@ -1,27 +1,53 @@
 language: android
-jdk: oraclejdk8
-- yes | sdkmanager "platforms;android-27"
+dist: trusty
+jdk: openjdk8
 
 env:
   global:
-    - ANDROID_API_LEVEL=27
-    - ANDROID_BUILD_TOOLS_VERSION=27.0.3
-    - TRAVIS_SECURE_ENV_VARS=true
+
+    - SLAVE_AAPT_TIMEOUT=31
+    - TERM=dumb
+    - GRADLE_OPTS="-XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError -Xmx2048m  -Dfile.encoding=UTF-8"
+
+matrix:
+  fast_finish: true
 
 android:
   components:
-    # The BuildTools version used by your project
-    - tools
-    - platform-tools
-    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
-    - extra-android-m2repository
-    - extra-google-android-support
 
-    # The SDK version used to compile your project
-    - android-$ANDROID_API_LEVEL
+    - platform-tools
+    - tools
+    - build-tools-31.0.0
+    - android-31
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+  # https://docs.travis-ci.com/user/languages/android/
   licenses:
-    - '.+'
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+
+before_install:
+  - git submodule update --init --recursive
+  - chmod u+x gradlew
+  - android list sdk --no-ui --all --extended
+  - android list targets
+  - yes | sdkmanager "platforms;android-31"
+
+
+
+install: true
 
 script:
-    - ./gradlew clean
-    - ./gradlew assembleDebug
+  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+  - chmod +x $TRAVIS_BUILD_DIR/install-jdk.sh
+  - export JAVA_HOME=$HOME/openjdk11
+  - $TRAVIS_BUILD_DIR/install-jdk.sh -F 11 --target $JAVA_HOME
+  - ./gradlew -v
+  - ./gradlew clean build --stacktrace
+
+after_failure: true
+
+notifications:
+  email: false
