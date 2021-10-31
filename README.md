@@ -1,6 +1,6 @@
 # ProgressManager
-[ ![Jcenter](https://img.shields.io/badge/Jcenter-v1.5.0-brightgreen.svg?style=flat-square) ](https://bintray.com/jessyancoding/maven/progressmanager/1.5.0/link)
-[ ![Build Status](https://travis-ci.org/JessYanCoding/ProgressManager.svg?branch=master) ](https://travis-ci.org/JessYanCoding/ProgressManager)
+[![](https://jitpack.io/v/kibotu/ProgressManager.svg)](https://jitpack.io/#kibotu/ProgressManager)
+[![Build Status](https://app.travis-ci.com/kibotu/ProgressManager.svg?branch=master)](https://app.travis-ci.com/kibotu/ProgressManager)
 [ ![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ProgressManager-brightgreen.svg?style=flat-square)](https://android-arsenal.com/details/1/5865)
 [ ![API](https://img.shields.io/badge/API-14%2B-blue.svg?style=flat-square) ](https://developer.android.com/about/versions/android-4.0.html)
 [ ![License](http://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square) ](http://www.apache.org/licenses/LICENSE-2.0)
