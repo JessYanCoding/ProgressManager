@@ -6,7 +6,6 @@
 [ ![License](http://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square) ](http://www.apache.org/licenses/LICENSE-2.0)
 [ ![Author](https://img.shields.io/badge/Author-JessYan-orange.svg?style=flat-square) ](https://www.jianshu.com/u/1d0c0bc634db)
 [ ![Author](https://img.shields.io/badge/Author-Jan%20Rabe-orange.svg?style=flat-square) ](https://kibotu.net)
-[ ![QQ-Group](https://img.shields.io/badge/QQ%E7%BE%A4-455850365%20%7C%20301733278-orange.svg?style=flat-square) ](https://shang.qq.com/wpa/qunwpa?idkey=7e59e59145e6c7c68932ace10f52790636451f01d1ecadb6a652b1df234df753)
 
 
 ## Listen the progress of  downloading and uploading in Okhttp (compatible Retrofit and Glide).
