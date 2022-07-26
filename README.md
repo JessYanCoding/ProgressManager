@@ -16,11 +16,11 @@
 ![gif](arts/progressManager.gif)
 
 ## Introduction
-**ProgressManager** a line of code to listen **App** all the links and upload the progress of the network, including **Glide** picture loading progress, to achieve the principle of similar **EventBus**, you can be in anywhere in **App**, the number of listeners to **Url** address as an identifier, registered to the framework, when this **Url** address haves to download or upload the action, the framework will take the initiative to call All listeners registered with this **Url** address are synchronized to multiple modules.
+-	ProgressManager a line of code to listen App all the links and upload the progress of the network, including Glide picture loading progress, to achieve the principle of similar EventBus, you can be in anywhere in App, the number of listeners to Url address as an identifier, registered to the framework, when this Url address haves to download or upload the action, the framework will take the initiative to call All listeners registered with this Url address are synchronized to multiple modules.
 
 
 ## Feature
-* Easy to use, just a line of code to listen progress.
+* Easy to use, just a line of code to listen to progress.
 * Multi-platform support, support **Okhttp** , **Retrofit** , **Glide** ,Use **Okhttp** native **Api** , there is no compatibility problem.
 * Low coupling, the actual request and the progress of the receiver does not exist directly or indirectly, that can be anywhere in **App** to receive progress information.
 * Low intrusion, use this framework you do not need to change the code before uploading or downloading, ie using or not using this framework does not affect the original code.
@@ -28,7 +28,7 @@
 * Support multi-file upload.
 * Support **URL** redirection.
 * Automatic management of the listener, less to manually cancel the trouble of the listener.
-* The default run in the main line layer, less to switch the thread of trouble.
+* The default runs in the main line layer, less to switch the thread of trouble.
 * Lightweight framework, does not contain any three-party library, very small size.
 
 ## Download
@@ -39,7 +39,8 @@
 ## Usage
 ### Step 1
 ``` java
- // When building OkHttpClient, the OkHttpClient.Builder() is passed to the with() method to initialize the configuration
+ // When building OkHttpClient, the OkHttpClient.Builder() is passed to the 
+ // with() method to initialize the configuration
  OkHttpClient = ProgressManager.getInstance().with(new OkHttpClient.Builder())
                 .build();
 ```
